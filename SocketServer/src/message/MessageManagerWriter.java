@@ -5,9 +5,9 @@
  */
 package message;
 
+import connection.ConnectionManager;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,16 +17,32 @@ import java.util.logging.Logger;
  */
 public class MessageManagerWriter implements Runnable {
 
-    private String message;
-    private OutputStream os;
+    private ConnectionManager connectionManager;
     private DataOutputStream dataOutputStream;
+    private String message;
 
     public MessageManagerWriter() {
     }
 
-    public MessageManagerWriter(OutputStream os) {
-        this.os = os;
-        dataOutputStream = new DataOutputStream(os);
+    public MessageManagerWriter(ConnectionManager connectionManager) {
+        this.connectionManager = connectionManager;
+        this.dataOutputStream = connectionManager.getDataOutputStream();
+    }
+
+    public ConnectionManager getConnectionManager() {
+        return connectionManager;
+    }
+
+    public void setConnectionManager(ConnectionManager connectionManager) {
+        this.connectionManager = connectionManager;
+    }
+
+    public DataOutputStream getDataOutputStream() {
+        return dataOutputStream;
+    }
+
+    public void setDataOutputStream(DataOutputStream dataOutputStream) {
+        this.dataOutputStream = dataOutputStream;
     }
 
     public String getMessage() {
@@ -37,28 +53,13 @@ public class MessageManagerWriter implements Runnable {
         this.message = message;
     }
 
-    public OutputStream getOs() {
-        return os;
-    }
-
-    public void setOs(OutputStream os) {
-        this.os = os;
-    }
-
-    public DataOutputStream getDataOutputStream() {
-        return dataOutputStream;
-    }
-
-    public void setDataOutputStream(DataOutputStream dataOutputStream) {
-        this.dataOutputStream = dataOutputStream;
-    }
-    
     @Override
     public void run() {
-        
+
         message = "";
-        
+
         while (true) {
+
             if (!message.isEmpty()) {
                 try {
                     dataOutputStream.writeChars(message);

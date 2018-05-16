@@ -5,9 +5,13 @@
  */
 package ui;
 
+import javax.swing.JButton;
+import javax.swing.JTextArea;
+import server.Server;
+
 /**
  *
- * @author Julian
+ * @author Julia
  */
 public class ServerConsole extends javax.swing.JFrame {
 
@@ -16,6 +20,7 @@ public class ServerConsole extends javax.swing.JFrame {
      */
     public ServerConsole() {
         initComponents();
+        setVisible(true);
     }
 
     /**
@@ -28,22 +33,37 @@ public class ServerConsole extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextAreaInput = new javax.swing.JTextArea();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextAreaOutput = new javax.swing.JTextArea();
-        jToggleButton1 = new javax.swing.JToggleButton();
+        jTextAreaConsole = new javax.swing.JTextArea();
+        jButtonStart = new javax.swing.JButton();
+        jButtonStop = new javax.swing.JButton();
+        jButtonClear = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTextAreaInput.setColumns(20);
-        jTextAreaInput.setRows(5);
-        jScrollPane1.setViewportView(jTextAreaInput);
+        jTextAreaConsole.setEditable(false);
+        jTextAreaConsole.setColumns(20);
+        jTextAreaConsole.setRows(5);
+        jTextAreaConsole.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jScrollPane1.setViewportView(jTextAreaConsole);
 
-        jTextAreaOutput.setColumns(20);
-        jTextAreaOutput.setRows(5);
-        jScrollPane2.setViewportView(jTextAreaOutput);
+        jButtonStart.setText("Start");
+        jButtonStart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonStartActionPerformed(evt);
+            }
+        });
 
-        jToggleButton1.setText("SEND");
+        jButtonStop.setText("Stop");
+
+        jButtonClear.setText("Clear");
+
+        jButton1.setText("Client");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -52,32 +72,101 @@ public class ServerConsole extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2)
-                    .addComponent(jToggleButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButtonStart, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonStop, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonClear, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 266, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jToggleButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonStart)
+                    .addComponent(jButtonStop)
+                    .addComponent(jButtonClear)
+                    .addComponent(jButton1))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        Client client = new Client();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButtonStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStartActionPerformed
+        // TODO add your handling code here:
+        Server server = new  Server();
+    }//GEN-LAST:event_jButtonStartActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButtonClear;
+    private javax.swing.JButton jButtonStart;
+    private javax.swing.JButton jButtonStop;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextAreaInput;
-    private javax.swing.JTextArea jTextAreaOutput;
-    private javax.swing.JToggleButton jToggleButton1;
+    private javax.swing.JTextArea jTextAreaConsole;
     // End of variables declaration//GEN-END:variables
-    
+
+    //GETTERS AND SETTERS
+    public JTextArea getjTextAreaConsole() {
+        return jTextAreaConsole;
+    }
+
+    public void setjTextAreaConsole(JTextArea jTextAreaConsole) {
+        this.jTextAreaConsole = jTextAreaConsole;
+    }
+
+    public JButton getjButtonClear() {
+        return jButtonClear;
+    }
+
+    public void setjButtonClear(JButton jButtonClear) {
+        this.jButtonClear = jButtonClear;
+    }
+
+    public JButton getjButtonStart() {
+        return jButtonStart;
+    }
+
+    public void setjButtonStart(JButton jButtonStart) {
+        this.jButtonStart = jButtonStart;
+    }
+
+    public JButton getjButtonStop() {
+        return jButtonStop;
+    }
+
+    public void setjButtonStop(JButton jButtonStop) {
+        this.jButtonStop = jButtonStop;
+    }
+
+    public void writeInConsole(String text) {
+        jTextAreaConsole.append(text);
+        jTextAreaConsole.append("\n");
+    }
+
+    public void writeInConsole(String text, boolean appendText) {
+
+        if (appendText) {
+            jTextAreaConsole.append(text);
+        } else {
+            jTextAreaConsole.setText(text);
+        }
+
+        jTextAreaConsole.append("\n");
+
+    }
 }

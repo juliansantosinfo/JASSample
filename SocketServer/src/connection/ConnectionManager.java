@@ -22,7 +22,9 @@ import server.Server;
  * @author Julian
  */
 public class ConnectionManager implements Runnable {
-
+    
+    private Server server;
+    private Socket connection;
     private InputStream is;
     private OutputStream os;
     private DataInputStream dataInputStream;
@@ -31,6 +33,9 @@ public class ConnectionManager implements Runnable {
     private MessageManagerWriter mmw;
 
     public ConnectionManager(Server server, Socket connection) {
+        
+        this.server = server;
+        this.connection =  connection;
         
         try {
             is = connection.getInputStream();
@@ -41,6 +46,22 @@ public class ConnectionManager implements Runnable {
             Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    public Server getServer() {
+        return server;
+    }
+
+    public void setServer(Server server) {
+        this.server = server;
+    }
+
+    public Socket getConnection() {
+        return connection;
+    }
+
+    public void setConnection(Socket connection) {
+        this.connection = connection;
     }
 
     public InputStream getIs() {
@@ -94,11 +115,11 @@ public class ConnectionManager implements Runnable {
     @Override
     public void run() {
 
-        mmr = new MessageManagerReader(is);
+        mmr = new MessageManagerReader(this);
         Thread tReader = new Thread(mmr);
         tReader.start();
 
-        mmw = new MessageManagerWriter(os);
+        mmw = new MessageManagerWriter(this);
         Thread tWriter = new Thread(mmw);
         tWriter.start();
     }

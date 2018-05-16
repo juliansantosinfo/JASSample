@@ -5,9 +5,9 @@
  */
 package message;
 
+import connection.ConnectionManager;
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,15 +17,15 @@ import java.util.logging.Logger;
  */
 public class MessageManagerReader implements Runnable {
 
-    private InputStream is;
+    private ConnectionManager connectionManager;
     private DataInputStream dataInputStream;
 
     public MessageManagerReader() {
     }
 
-    public MessageManagerReader(InputStream is) {
-        this.is = is;
-        this.dataInputStream = new DataInputStream(is);
+    public MessageManagerReader(ConnectionManager connectionManager) {
+        this.connectionManager = connectionManager;
+        this.dataInputStream = connectionManager.getDataInputStream();
     }
 
     @Override
@@ -39,10 +39,11 @@ public class MessageManagerReader implements Runnable {
                     message += (char) dataInputStream.read();
                 }
                 if (!message.isEmpty()) {
-                    System.out.println(message);
+                    message = connectionManager.getConnection().getInetAddress().toString() + ": " + message;
+                    connectionManager.getServer().getConsole().writeInConsole(message);
                     message = "";
                 }
-                
+
             } catch (IOException ex) {
                 Logger.getLogger(MessageManagerReader.class.getName()).log(Level.SEVERE, null, ex);
             }
