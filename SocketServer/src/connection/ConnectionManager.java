@@ -5,6 +5,7 @@
  */
 package connection;
 
+import java.util.List;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -31,6 +32,8 @@ public class ConnectionManager implements Runnable {
     private DataOutputStream dataOutputStream;
     private MessageManagerReader mmr;
     private MessageManagerWriter mmw;
+    private List<String> messageInputList;
+    private List<String> messageOutputList;
 
     public ConnectionManager(Server server, Socket connection) {
         
@@ -111,6 +114,22 @@ public class ConnectionManager implements Runnable {
     public void setMmw(MessageManagerWriter mmw) {
         this.mmw = mmw;
     }
+
+    public List<String> getMessageInputList() {
+        return messageInputList;
+    }
+
+    public void setMessageInputList(List<String> messageInputList) {
+        this.messageInputList = messageInputList;
+    }
+
+    public List<String> getMessageOutputList() {
+        return messageOutputList;
+    }
+
+    public void setMessageOutputList(List<String> messageOutputList) {
+        this.messageOutputList = messageOutputList;
+    }
     
     @Override
     public void run() {
@@ -123,18 +142,8 @@ public class ConnectionManager implements Runnable {
         Thread tWriter = new Thread(mmw);
         tWriter.start();
         
-        while (!connection.isClosed()) {
-            try {
-                System.out.println("CONECTADO");
-                Thread.sleep(1000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        
         mmr.setStopped(true);
         mmw.setStopped(true);
-        System.out.println("DESCONECTOU");
     }
 
 }

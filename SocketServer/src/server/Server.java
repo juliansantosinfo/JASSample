@@ -46,7 +46,7 @@ public class Server implements Runnable {
         this.console = console;
     }
 
-    public final void initServer() {
+    public final void startServer() {
         try {
             serverSocket = new ServerSocket(port);
             while (serverSocket.isBound()) {
@@ -71,7 +71,7 @@ public class Server implements Runnable {
         }
     }
     
-    public void logInitServer() {
+    public void logStartServer() {
         
         Calendar c = Calendar.getInstance();
         String date = String.valueOf(c.get(Calendar.DAY_OF_MONTH) + "/" + String.valueOf(c.get(Calendar.MONTH)) + "/" + String.valueOf(c.get(Calendar.YEAR)));
@@ -85,9 +85,24 @@ public class Server implements Runnable {
         console.writeInConsole("----------------------------------------------");
     }
     
+    public void logStoptServer() {
+        
+        Calendar c = Calendar.getInstance();
+        String date = String.valueOf(c.get(Calendar.DAY_OF_MONTH) + "/" + String.valueOf(c.get(Calendar.MONTH)) + "/" + String.valueOf(c.get(Calendar.YEAR)));
+        String hour = String.valueOf(c.get(Calendar.HOUR_OF_DAY) + ":" + String.valueOf(c.get(Calendar.MINUTE)) + ":" + String.valueOf(c.get(Calendar.SECOND)));
+        
+        console.writeInConsole("----------------------------------------------");
+        console.writeInConsole("FINALIZANDO SERVER - ServersSocket 1.0");
+        console.writeInConsole("----------------------------------------------");
+        console.writeInConsole("Date: " + date);
+        console.writeInConsole("Time: " + hour);
+        console.writeInConsole("----------------------------------------------");
+    }
+    
     @Override
     public void run() {
-        logInitServer();
-        initServer();
+        logStartServer();
+        startServer();
+        logStoptServer();
     }
 }

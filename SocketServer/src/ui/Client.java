@@ -28,7 +28,6 @@ public class Client extends javax.swing.JFrame implements Runnable {
      */
     public Client() {
         initComponents();
-        setVisible(true);
     }
 
     /**
@@ -208,10 +207,11 @@ public class Client extends javax.swing.JFrame implements Runnable {
             // TODO add your handling code here:
             dos.writeUTF(jTextField.getText());
             dos.flush();
-            jTextArea.append("SEND [" + Calendar.getInstance().get(Calendar.HOUR_OF_DAY) + "]");
+            jTextArea.append("SEND:");
             jTextArea.append("\n");
             jTextArea.append(jTextField.getText());
             jTextArea.append("\n");
+            jTextField.setText("");
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -266,6 +266,7 @@ public class Client extends javax.swing.JFrame implements Runnable {
 
     @Override
     public void run() {
+        setVisible(true);
     }
 
 }

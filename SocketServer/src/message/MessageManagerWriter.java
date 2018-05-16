@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  * @author Julian
  */
 public class MessageManagerWriter implements Runnable {
-    
+
     private boolean stopped = false;
     private ConnectionManager connectionManager;
     private DataOutputStream dataOutputStream;
@@ -29,7 +29,7 @@ public class MessageManagerWriter implements Runnable {
         this.connectionManager = connectionManager;
         this.dataOutputStream = connectionManager.getDataOutputStream();
     }
-    
+
     public boolean isStopped() {
         return stopped;
     }
@@ -37,7 +37,7 @@ public class MessageManagerWriter implements Runnable {
     public void setStopped(boolean isStopped) {
         this.stopped = isStopped;
     }
-    
+
     public ConnectionManager getConnectionManager() {
         return connectionManager;
     }
@@ -71,18 +71,19 @@ public class MessageManagerWriter implements Runnable {
 
             if (!message.isEmpty()) {
                 try {
+                    connectionManager.getMessageOutputList().add(message);
                     dataOutputStream.writeChars(message);
+                    dataOutputStream.flush();
                     message = "";
                 } catch (IOException ex) {
                     Logger.getLogger(MessageManagerWriter.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(MessageManagerWriter.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
-            try {
-                Thread.currentThread().sleep(1000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(MessageManagerWriter.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
         }
     }
 

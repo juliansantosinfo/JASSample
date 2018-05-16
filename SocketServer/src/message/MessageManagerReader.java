@@ -16,10 +16,11 @@ import java.util.logging.Logger;
  * @author Julian
  */
 public class MessageManagerReader implements Runnable {
-    
+
     private boolean stopped = false;
     private ConnectionManager connectionManager;
     private DataInputStream dataInputStream;
+    private String message;
 
     public MessageManagerReader() {
     }
@@ -36,32 +37,28 @@ public class MessageManagerReader implements Runnable {
     public void setStopped(boolean stopped) {
         this.stopped = stopped;
     }
-    
+
     @Override
     public void run() {
 
-        String message = "";
-
         while (!stopped) {
-            
+
+            message = "";
+
             try {
                 while (dataInputStream.available() > 0) {
                     message += (char) dataInputStream.read();
                 }
                 if (!message.isEmpty()) {
-                    message = connectionManager.getConnection().getInetAddress().toString() + ": " + message;
-                    connectionManager.getServer().getConsole().writeInConsole(message);
-                    message = "";
+                    connectionManager.getMessageInputList().add(message);
                 }
+                Thread.sleep(1000);
             } catch (IOException ex) {
                 Logger.getLogger(MessageManagerReader.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            try {
-                Thread.currentThread().sleep(1000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(MessageManagerReader.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
         }
     }
 
