@@ -21,11 +21,19 @@ public class Server {
 
     private int port;
     private ServerConsole console;
+    private ServerSocket serverSocket;
 
-    public Server() {
-        port = 27000;
-        console = new ServerConsole();
-        initServer();
+    public Server(ServerConsole serverConsole, int port) {
+        this.port = port;
+        console = serverConsole;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
     }
 
     public ServerConsole getConsole() {
@@ -38,12 +46,22 @@ public class Server {
 
     public final void initServer() {
         try {
-            ServerSocket serverSocket = new ServerSocket(port);
+            serverSocket = new ServerSocket(port);
             while (true) {
                 Socket connection = serverSocket.accept();
                 ConnectionManager connectionManager = new ConnectionManager(this, connection);
                 Thread t = new Thread(connectionManager);
                 t.start();
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void stopServer() {
+        try {
+            if (serverSocket.isBound()) {
+                serverSocket.close();
             }
         } catch (IOException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);

@@ -68,6 +68,12 @@ public class MessageManagerWriter implements Runnable {
                     Logger.getLogger(MessageManagerWriter.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+            try {
+                Thread.currentThread().sleep(1000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(MessageManagerWriter.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
         }
     }
 

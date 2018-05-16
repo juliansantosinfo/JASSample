@@ -28,14 +28,17 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jScrollPane1" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
-                      <Component id="jButtonStart" min="-2" pref="90" max="-2" attributes="0"/>
+                      <Component id="jBtnStart" min="-2" pref="90" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jButtonStop" min="-2" pref="90" max="-2" attributes="0"/>
+                      <Component id="jBtnStop" min="-2" pref="90" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jButtonClear" min="-2" pref="90" max="-2" attributes="0"/>
+                      <Component id="jBtnClear" min="-2" pref="90" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jButton1" min="-2" pref="90" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="266" max="32767" attributes="0"/>
+                      <Component id="jBtnClient" min="-2" pref="90" max="-2" attributes="0"/>
+                      <EmptySpace pref="197" max="32767" attributes="0"/>
+                      <Component id="jLabelPort" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jTextFieldPort" min="-2" pref="45" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -49,10 +52,12 @@
               <Component id="jScrollPane1" pref="364" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jButtonStart" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jButtonStop" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jButtonClear" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jBtnStart" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jBtnStop" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jBtnClear" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jBtnClient" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jTextFieldPort" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabelPort" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -81,31 +86,47 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JButton" name="jButtonStart">
+    <Component class="javax.swing.JButton" name="jBtnStart">
       <Properties>
         <Property name="text" type="java.lang.String" value="Start"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonStartActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBtnStartActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButtonStop">
+    <Component class="javax.swing.JButton" name="jBtnStop">
       <Properties>
         <Property name="text" type="java.lang.String" value="Stop"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBtnStopActionPerformed"/>
+      </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButtonClear">
+    <Component class="javax.swing.JButton" name="jBtnClear">
       <Properties>
         <Property name="text" type="java.lang.String" value="Clear"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBtnClearActionPerformed"/>
+      </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton1">
+    <Component class="javax.swing.JButton" name="jBtnClient">
       <Properties>
         <Property name="text" type="java.lang.String" value="Client"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBtnClientActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JTextField" name="jTextFieldPort">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="27000"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabelPort">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Port"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

@@ -34,6 +34,7 @@ public class MessageManagerReader implements Runnable {
         String message = "";
 
         while (true) {
+            
             try {
                 while (dataInputStream.available() > 0) {
                     message += (char) dataInputStream.read();
@@ -43,10 +44,15 @@ public class MessageManagerReader implements Runnable {
                     connectionManager.getServer().getConsole().writeInConsole(message);
                     message = "";
                 }
-
             } catch (IOException ex) {
                 Logger.getLogger(MessageManagerReader.class.getName()).log(Level.SEVERE, null, ex);
             }
+            try {
+                Thread.currentThread().sleep(1000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(MessageManagerReader.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
         }
     }
 

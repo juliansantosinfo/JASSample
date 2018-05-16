@@ -6,7 +6,6 @@
 package ui;
 
 import java.io.DataInputStream;
-import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
@@ -17,7 +16,7 @@ import java.util.logging.Logger;
  *
  * @author Julia
  */
-public class Client extends javax.swing.JFrame {
+public class Client extends javax.swing.JFrame implements Runnable {
 
     Socket connection;
     DataInputStream dis;
@@ -43,23 +42,26 @@ public class Client extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea = new javax.swing.JTextArea();
         jTextField = new javax.swing.JTextField();
-        jButtonSend = new javax.swing.JButton();
+        jBtnSend = new javax.swing.JButton();
         jTextFieldIP = new javax.swing.JTextField();
         jTextFieldPort = new javax.swing.JTextField();
-        jButtonConnect = new javax.swing.JButton();
+        jBtnConnect = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jBtnDisconnect = new javax.swing.JButton();
+        jBtnExit = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jTextArea.setColumns(20);
         jTextArea.setRows(5);
         jScrollPane1.setViewportView(jTextArea);
 
-        jButtonSend.setText("SEND");
-        jButtonSend.addActionListener(new java.awt.event.ActionListener() {
+        jBtnSend.setText("SEND");
+        jBtnSend.setEnabled(false);
+        jBtnSend.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonSendActionPerformed(evt);
+                jBtnSendActionPerformed(evt);
             }
         });
 
@@ -67,16 +69,31 @@ public class Client extends javax.swing.JFrame {
 
         jTextFieldPort.setText("27000");
 
-        jButtonConnect.setText("Connect");
-        jButtonConnect.addActionListener(new java.awt.event.ActionListener() {
+        jBtnConnect.setText("Connect");
+        jBtnConnect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonConnectActionPerformed(evt);
+                jBtnConnectActionPerformed(evt);
             }
         });
 
         jLabel1.setText("IP");
 
         jLabel2.setText("Port");
+
+        jBtnDisconnect.setText("Disconnect");
+        jBtnDisconnect.setEnabled(false);
+        jBtnDisconnect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnDisconnectActionPerformed(evt);
+            }
+        });
+
+        jBtnExit.setText("Exit");
+        jBtnExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnExitActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -89,7 +106,7 @@ public class Client extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jTextField)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonSend))
+                        .addComponent(jBtnSend))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTextFieldIP, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -97,11 +114,16 @@ public class Client extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(jTextFieldPort, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButtonConnect))
-                            .addComponent(jLabel2))
-                        .addGap(0, 199, Short.MAX_VALUE)))
+                                .addComponent(jBtnConnect)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jBtnDisconnect)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jBtnExit, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -115,20 +137,22 @@ public class Client extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldIP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextFieldPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonConnect))
+                    .addComponent(jBtnConnect)
+                    .addComponent(jBtnDisconnect)
+                    .addComponent(jBtnExit))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonSend))
+                    .addComponent(jBtnSend))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButtonConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConnectActionPerformed
+    private void jBtnConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnConnectActionPerformed
         try {
             // TODO add your handling code here:
             connection = new Socket(jTextFieldIP.getText(), Integer.parseInt(jTextFieldPort.getText()));
@@ -140,27 +164,37 @@ public class Client extends javax.swing.JFrame {
 
                 jTextFieldIP.setEditable(false);
                 jTextFieldPort.setEditable(false);
-                jButtonConnect.setEnabled(false);
-
-                jButtonSend.setEnabled(true);
+                jBtnConnect.setEnabled(false);
+                
+                jBtnConnect.setEnabled(false);
+                jBtnDisconnect.setEnabled(true);
+                
+                jBtnSend.setEnabled(true);
                 jTextField.setEditable(true);
+                
+                jBtnExit.setEnabled(false);
 
             } else {
 
                 jTextFieldIP.setEditable(true);
                 jTextFieldPort.setEditable(true);
-                jButtonConnect.setEnabled(true);
+                jBtnConnect.setEnabled(true);
+                
+                jBtnConnect.setEnabled(true);
+                jBtnDisconnect.setEnabled(false);
 
-                jButtonSend.setEnabled(false);
+                jBtnSend.setEnabled(false);
                 jTextField.setEditable(false);
+                
+                jBtnExit.setEnabled(true);
             }
 
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButtonConnectActionPerformed
+    }//GEN-LAST:event_jBtnConnectActionPerformed
 
-    private void jButtonSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSendActionPerformed
+    private void jBtnSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnSendActionPerformed
         try {
             // TODO add your handling code here:
             dos.writeUTF(jTextField.getText());
@@ -169,11 +203,57 @@ public class Client extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButtonSendActionPerformed
+    }//GEN-LAST:event_jBtnSendActionPerformed
+
+    private void jBtnDisconnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnDisconnectActionPerformed
+        try {
+            // TODO add your handling code here:
+            connection.close();
+            
+            if (connection.isConnected()) {
+
+                jTextFieldIP.setEditable(true);
+                jTextFieldPort.setEditable(true);
+                jBtnConnect.setEnabled(true);
+                
+                jBtnConnect.setEnabled(true);
+                jBtnDisconnect.setEnabled(false);
+
+                jBtnSend.setEnabled(false);
+                jTextField.setEditable(false);
+
+            } else {
+                
+                dis.close();
+                dos.close();
+
+                jTextFieldIP.setEditable(false);
+                jTextFieldPort.setEditable(false);
+                jBtnConnect.setEnabled(false);
+                
+                jBtnConnect.setEnabled(false);
+                jBtnDisconnect.setEnabled(true);
+                
+                jBtnSend.setEnabled(true);
+                jTextField.setEditable(true);
+                
+            }
+            
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jBtnDisconnectActionPerformed
+
+    private void jBtnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnExitActionPerformed
+        // TODO add your handling code here:
+        dispose();
+    }//GEN-LAST:event_jBtnExitActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonConnect;
-    private javax.swing.JButton jButtonSend;
+    private javax.swing.JButton jBtnConnect;
+    private javax.swing.JButton jBtnDisconnect;
+    private javax.swing.JButton jBtnExit;
+    private javax.swing.JButton jBtnSend;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
@@ -182,4 +262,9 @@ public class Client extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldIP;
     private javax.swing.JTextField jTextFieldPort;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void run() {
+    }
+
 }
