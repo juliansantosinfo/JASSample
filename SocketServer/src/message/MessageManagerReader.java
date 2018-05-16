@@ -16,7 +16,8 @@ import java.util.logging.Logger;
  * @author Julian
  */
 public class MessageManagerReader implements Runnable {
-
+    
+    private boolean stopped = false;
     private ConnectionManager connectionManager;
     private DataInputStream dataInputStream;
 
@@ -28,12 +29,20 @@ public class MessageManagerReader implements Runnable {
         this.dataInputStream = connectionManager.getDataInputStream();
     }
 
+    public boolean isStopped() {
+        return stopped;
+    }
+
+    public void setStopped(boolean stopped) {
+        this.stopped = stopped;
+    }
+    
     @Override
     public void run() {
 
         String message = "";
 
-        while (true) {
+        while (!stopped) {
             
             try {
                 while (dataInputStream.available() > 0) {

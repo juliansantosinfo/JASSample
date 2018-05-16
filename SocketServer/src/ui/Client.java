@@ -9,6 +9,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,7 +42,6 @@ public class Client extends javax.swing.JFrame implements Runnable {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea = new javax.swing.JTextArea();
-        jTextField = new javax.swing.JTextField();
         jBtnSend = new javax.swing.JButton();
         jTextFieldIP = new javax.swing.JTextField();
         jTextFieldPort = new javax.swing.JTextField();
@@ -50,6 +50,8 @@ public class Client extends javax.swing.JFrame implements Runnable {
         jLabel2 = new javax.swing.JLabel();
         jBtnDisconnect = new javax.swing.JButton();
         jBtnExit = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextField = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -95,6 +97,10 @@ public class Client extends javax.swing.JFrame implements Runnable {
             }
         });
 
+        jTextField.setColumns(20);
+        jTextField.setRows(5);
+        jScrollPane2.setViewportView(jTextField);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -104,14 +110,13 @@ public class Client extends javax.swing.JFrame implements Runnable {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTextField)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBtnSend))
-                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextFieldIP, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(175, 175, 175))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jTextFieldIP, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2)
@@ -123,7 +128,11 @@ public class Client extends javax.swing.JFrame implements Runnable {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jBtnDisconnect)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jBtnExit, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)))))
+                                .addComponent(jBtnExit, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jBtnSend)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -133,7 +142,7 @@ public class Client extends javax.swing.JFrame implements Runnable {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldIP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextFieldPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -141,11 +150,11 @@ public class Client extends javax.swing.JFrame implements Runnable {
                     .addComponent(jBtnDisconnect)
                     .addComponent(jBtnExit))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBtnSend))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jBtnSend, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -165,13 +174,13 @@ public class Client extends javax.swing.JFrame implements Runnable {
                 jTextFieldIP.setEditable(false);
                 jTextFieldPort.setEditable(false);
                 jBtnConnect.setEnabled(false);
-                
+
                 jBtnConnect.setEnabled(false);
                 jBtnDisconnect.setEnabled(true);
-                
+
                 jBtnSend.setEnabled(true);
                 jTextField.setEditable(true);
-                
+
                 jBtnExit.setEnabled(false);
 
             } else {
@@ -179,13 +188,13 @@ public class Client extends javax.swing.JFrame implements Runnable {
                 jTextFieldIP.setEditable(true);
                 jTextFieldPort.setEditable(true);
                 jBtnConnect.setEnabled(true);
-                
+
                 jBtnConnect.setEnabled(true);
                 jBtnDisconnect.setEnabled(false);
 
                 jBtnSend.setEnabled(false);
                 jTextField.setEditable(false);
-                
+
                 jBtnExit.setEnabled(true);
             }
 
@@ -199,7 +208,10 @@ public class Client extends javax.swing.JFrame implements Runnable {
             // TODO add your handling code here:
             dos.writeUTF(jTextField.getText());
             dos.flush();
-            jTextArea.append("SEND: " + jTextField.getText());
+            jTextArea.append("SEND [" + Calendar.getInstance().get(Calendar.HOUR_OF_DAY) + "]");
+            jTextArea.append("\n");
+            jTextArea.append(jTextField.getText());
+            jTextArea.append("\n");
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -208,37 +220,25 @@ public class Client extends javax.swing.JFrame implements Runnable {
     private void jBtnDisconnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnDisconnectActionPerformed
         try {
             // TODO add your handling code here:
-            connection.close();
-            
-            if (connection.isConnected()) {
 
-                jTextFieldIP.setEditable(true);
-                jTextFieldPort.setEditable(true);
-                jBtnConnect.setEnabled(true);
-                
-                jBtnConnect.setEnabled(true);
-                jBtnDisconnect.setEnabled(false);
-
-                jBtnSend.setEnabled(false);
-                jTextField.setEditable(false);
-
-            } else {
-                
+            while (!connection.isClosed()) {
+                connection.shutdownInput();
+                connection.shutdownOutput();
                 dis.close();
                 dos.close();
-
-                jTextFieldIP.setEditable(false);
-                jTextFieldPort.setEditable(false);
-                jBtnConnect.setEnabled(false);
-                
-                jBtnConnect.setEnabled(false);
-                jBtnDisconnect.setEnabled(true);
-                
-                jBtnSend.setEnabled(true);
-                jTextField.setEditable(true);
-                
+                connection.close();
             }
-            
+
+            jTextFieldIP.setEditable(true);
+            jTextFieldPort.setEditable(true);
+            jBtnConnect.setEnabled(true);
+
+            jBtnConnect.setEnabled(true);
+            jBtnDisconnect.setEnabled(false);
+
+            jBtnSend.setEnabled(false);
+            jTextField.setEditable(false);
+
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -257,8 +257,9 @@ public class Client extends javax.swing.JFrame implements Runnable {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea;
-    private javax.swing.JTextField jTextField;
+    private javax.swing.JTextArea jTextField;
     private javax.swing.JTextField jTextFieldIP;
     private javax.swing.JTextField jTextFieldPort;
     // End of variables declaration//GEN-END:variables

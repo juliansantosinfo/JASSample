@@ -9,6 +9,7 @@ import connection.ConnectionManager;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import ui.ServerConsole;
@@ -17,11 +18,12 @@ import ui.ServerConsole;
  *
  * @author Julian
  */
-public class Server {
+public class Server implements Runnable {
 
     private int port;
     private ServerConsole console;
     private ServerSocket serverSocket;
+    private Socket connection;
 
     public Server(ServerConsole serverConsole, int port) {
         this.port = port;
@@ -47,11 +49,12 @@ public class Server {
     public final void initServer() {
         try {
             serverSocket = new ServerSocket(port);
-            while (true) {
-                Socket connection = serverSocket.accept();
+            while (serverSocket.isBound()) {
+                connection = serverSocket.accept();
                 ConnectionManager connectionManager = new ConnectionManager(this, connection);
                 Thread t = new Thread(connectionManager);
                 t.start();
+                
             }
         } catch (IOException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
@@ -66,5 +69,25 @@ public class Server {
         } catch (IOException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void logInitServer() {
+        
+        Calendar c = Calendar.getInstance();
+        String date = String.valueOf(c.get(Calendar.DAY_OF_MONTH) + "/" + String.valueOf(c.get(Calendar.MONTH)) + "/" + String.valueOf(c.get(Calendar.YEAR)));
+        String hour = String.valueOf(c.get(Calendar.HOUR_OF_DAY) + ":" + String.valueOf(c.get(Calendar.MINUTE)) + ":" + String.valueOf(c.get(Calendar.SECOND)));
+        
+        console.writeInConsole("----------------------------------------------");
+        console.writeInConsole("INICIANDO SERVER - ServersSocket 1.0");
+        console.writeInConsole("----------------------------------------------");
+        console.writeInConsole("Date: " + date);
+        console.writeInConsole("Time: " + hour);
+        console.writeInConsole("----------------------------------------------");
+    }
+    
+    @Override
+    public void run() {
+        logInitServer();
+        initServer();
     }
 }

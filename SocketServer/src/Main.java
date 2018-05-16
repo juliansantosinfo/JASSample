@@ -1,5 +1,4 @@
 
-import server.Server;
 import ui.ServerConsole;
 
 /*
@@ -18,8 +17,7 @@ public class Main {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        Server server = new Server(new ServerConsole(), 27000);
-        server.initServer();
+        ServerConsole console = new ServerConsole();
     }
-    
+
 }

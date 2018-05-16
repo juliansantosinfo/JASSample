@@ -22,12 +22,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
+import server.Server;
 
 /**
  *
  * @author Julia
  */
 public class ServerConsole extends javax.swing.JFrame {
+
+    Server server;
 
     /**
      * Creates new form ServerConsole
@@ -75,6 +78,7 @@ public class ServerConsole extends javax.swing.JFrame {
         });
 
         jBtnStop.setText("Stop");
+        jBtnStop.setEnabled(false);
         jBtnStop.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBtnStopActionPerformed(evt);
@@ -142,10 +146,19 @@ public class ServerConsole extends javax.swing.JFrame {
 
     private void jBtnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnStartActionPerformed
         // TODO add your handling code here:
+        server = new Server(this, Integer.parseInt(jTextFieldPort.getText()));
+        Thread tServer = new Thread(server);
+        tServer.start();
+        
+        jBtnStart.setEnabled(false);
+        jBtnStop.setEnabled(true);
     }//GEN-LAST:event_jBtnStartActionPerformed
 
     private void jBtnStopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnStopActionPerformed
         // TODO add your handling code here:
+        server.stopServer();
+        jBtnStart.setEnabled(true);
+        jBtnStop.setEnabled(false);
     }//GEN-LAST:event_jBtnStopActionPerformed
 
     private void jBtnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnClearActionPerformed
@@ -169,7 +182,7 @@ public class ServerConsole extends javax.swing.JFrame {
             }
 
             @Override
-            public void windowDeactivated(WindowEvent e) {
+            public void windowDeiconified(WindowEvent e) {
                 setVisible(false);
             }
 

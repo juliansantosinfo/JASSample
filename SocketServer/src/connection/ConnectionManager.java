@@ -122,6 +122,19 @@ public class ConnectionManager implements Runnable {
         mmw = new MessageManagerWriter(this);
         Thread tWriter = new Thread(mmw);
         tWriter.start();
+        
+        while (!connection.isClosed()) {
+            try {
+                System.out.println("CONECTADO");
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(ConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        mmr.setStopped(true);
+        mmw.setStopped(true);
+        System.out.println("DESCONECTOU");
     }
 
 }

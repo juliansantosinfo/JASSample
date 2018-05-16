@@ -16,7 +16,8 @@ import java.util.logging.Logger;
  * @author Julian
  */
 public class MessageManagerWriter implements Runnable {
-
+    
+    private boolean stopped = false;
     private ConnectionManager connectionManager;
     private DataOutputStream dataOutputStream;
     private String message;
@@ -28,7 +29,15 @@ public class MessageManagerWriter implements Runnable {
         this.connectionManager = connectionManager;
         this.dataOutputStream = connectionManager.getDataOutputStream();
     }
+    
+    public boolean isStopped() {
+        return stopped;
+    }
 
+    public void setStopped(boolean isStopped) {
+        this.stopped = isStopped;
+    }
+    
     public ConnectionManager getConnectionManager() {
         return connectionManager;
     }
@@ -58,7 +67,7 @@ public class MessageManagerWriter implements Runnable {
 
         message = "";
 
-        while (true) {
+        while (!stopped) {
 
             if (!message.isEmpty()) {
                 try {
