@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  *
  * @author Julian Santos
  */
-public class Server extends  Thread{
+public class Server extends Thread {
 
     private int port;
     private ServerSocket serverSocket;
@@ -78,10 +78,10 @@ public class Server extends  Thread{
             serverSocket = new ServerSocket(port);
 
             while (!serverSocket.isClosed()) {
-                
+
                 // Aceita conexao do cliente.
                 connection = serverSocket.accept();
-                
+
                 // Cria thread para gerenciar conexao.
                 ConnectionManager connectionManager = new ConnectionManager(this, connection);
                 connectionManager.start();

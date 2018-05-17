@@ -148,7 +148,7 @@ public class ServerConsole extends javax.swing.JFrame {
         // TODO add your handling code here:
         server = new Server(Integer.parseInt(jTextFieldPort.getText()));
         server.start();
-        
+
         jBtnStart.setEnabled(false);
         jBtnStop.setEnabled(true);
     }//GEN-LAST:event_jBtnStartActionPerformed

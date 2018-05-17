@@ -7,6 +7,8 @@ package br.com.juliansantos.message;
 
 import br.com.juliansantos.connection.ConnectionManager;
 import br.com.juliansantos.entity.Message;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -21,7 +23,9 @@ public class MessageManagerWriter implements Runnable {
     private boolean stopped = false;
     private ConnectionManager connectionManager;
     private DataOutputStream dataOutputStream;
+    private String messageOutput;
     private Message message;
+    private Gson gson;
 
     public MessageManagerWriter() {
     }
@@ -67,22 +71,32 @@ public class MessageManagerWriter implements Runnable {
     public void run() {
 
         while (!stopped) {
-            
+
             while (connectionManager.existMessageOutputList()) {
-                
+
+                message = connectionManager.nextMessageOutputList();
+
                 try {
-                    dataOutputStream.writeUTF(message.getMessage());
+                    
+                    gson = new GsonBuilder().create();
+                    messageOutput = gson.toJson(message);
+                    
+                    System.out.println("ESCR: " + messageOutput);
+                    
+                    dataOutputStream.writeUTF(messageOutput);
                     dataOutputStream.flush();
+                    
+                    connectionManager.removeMessageOutputList();
+                    
                 } catch (IOException ex) {
                     Logger.getLogger(MessageManagerWriter.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(MessageManagerWriter.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                
+            }
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(MessageManagerWriter.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

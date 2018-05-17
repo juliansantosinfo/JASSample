@@ -39,9 +39,9 @@ public class MessageManagerSend implements Runnable {
         while (true) {
 
             if (connectionManager.existMessageOutputList()) {
-                
+
                 message = new Message(0, "");
-                
+
                 try {
                     if (message.getTyprMessage() == Message.IN) {
                         connectionManager.getDataOutputStream().writeUTF(message.getMessage());

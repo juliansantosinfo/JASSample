@@ -20,6 +20,7 @@ import br.com.juliansantos.message.MessageManagerSend;
 import br.com.juliansantos.message.MessageManagerWriter;
 import br.com.juliansantos.message.MessageProcessManager;
 import br.com.juliansantos.server.Server;
+import java.util.ArrayList;
 
 /**
  *
@@ -37,8 +38,10 @@ public class ConnectionManager extends Thread {
     private MessageManagerWriter mmw;
     private MessageProcessManager mpm;
     private MessageManagerSend mms;
-    private List<Message> messageInputList;
-    private List<Message> messageOutputList;
+    private List<Message> messageInputList = new ArrayList<>();
+    private List<Message> messageOutputList = new ArrayList<>();
+
+    private Object keyInputList = new Object();
 
     public ConnectionManager(Server server, Socket connection) {
 
@@ -143,9 +146,21 @@ public class ConnectionManager extends Thread {
     public void setMessageOutputList(List<Message> messageOutputList) {
         this.messageOutputList = messageOutputList;
     }
-    
+
+    public Object getKeyInputList() {
+        return keyInputList;
+    }
+
+    public void setKeyInputList(Object keyInputList) {
+        this.keyInputList = keyInputList;
+    }
+
     public boolean existMessageInputList() {
         return messageInputList.size() > 0;
+    }
+
+    public void addMessageInputList(Message message) {
+        messageInputList.add(message);
     }
 
     public void addMessageInputList(String message) {
@@ -153,47 +168,59 @@ public class ConnectionManager extends Thread {
         messageObjet.read();
         messageInputList.add(messageObjet);
     }
-    
-    public Message nextMessageInputList () {
-        return messageInputList.get(1);
+
+    public Message nextMessageInputList() {
+        return messageInputList.get(0);
     }
-    
-    public Message getMessageInputList (int index) {
+
+    public Message getMessageInputList(int index) {
         return messageInputList.get(index);
     }
-    
+
+    public void removeMessageInputList() {
+        messageInputList.remove(0);
+    }
+
     public boolean existMessageOutputList() {
-        return messageInputList.size() > 0;
+        return messageOutputList.size() > 0;
+    }
+
+    public void addMessageOutputList(Message message) {
+        messageOutputList.add(message);
     }
 
     public void addMessageOutputList(String message) {
         Message messageObjet = new Message(Message.OUT, message);
         messageObjet.read();
-        messageInputList.add(messageObjet);
+        messageOutputList.add(messageObjet);
     }
-    
-    public Message nextMessageOutputList () {
-        return messageOutputList.get(1);
+
+    public Message nextMessageOutputList() {
+        return messageOutputList.get(0);
     }
-    
-    public Message getMessageOutputList (int index) {
+
+    public Message getMessageOutputList(int index) {
         return messageOutputList.get(index);
     }
-    
+
+    public void removeMessageOutputList() {
+        messageOutputList.remove(0);
+    }
+
     @Override
     public void run() {
 
         mmr = new MessageManagerReader(this);
-        mmr.run();
+        Thread tmmr = new Thread(mmr);
+        tmmr.start();
 
         mmw = new MessageManagerWriter(this);
-        mmw.run();
-        
+        Thread tmmw = new Thread(mmw);
+        tmmw.start();
+
         mpm = new MessageProcessManager(this);
-        mpm.run();
-        
-        mms = new MessageManagerSend(this);
-        mms.run();
+        Thread tmpm = new Thread(mpm);
+        tmpm.start();
 
     }
 

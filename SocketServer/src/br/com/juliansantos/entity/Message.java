@@ -12,10 +12,10 @@ import br.com.juliansantos.JASDateHour.JASDateHour;
  * @author Julian Santos
  */
 public class Message {
-    
+
     public static final int IN = 1;
     public static final int OUT = 2;
-    
+
     private String date;
     private String hour;
     private int typrMessage;
@@ -61,7 +61,7 @@ public class Message {
     public void setMessageReady(boolean messageReady) {
         this.messageReady = messageReady;
     }
-    
+
     public Message(int typrMessage, String message) {
         this.date = "";
         this.hour = "";
@@ -69,7 +69,7 @@ public class Message {
         this.typrMessage = typrMessage;
         this.message = message;
     }
-    
+
     public void read() {
         date = JASDateHour.currentDate();
         hour = JASDateHour.currentHour();
