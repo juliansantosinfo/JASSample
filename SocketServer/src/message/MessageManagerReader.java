@@ -6,6 +6,7 @@
 package message;
 
 import connection.ConnectionManager;
+import entity.Message;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -46,13 +47,17 @@ public class MessageManagerReader implements Runnable {
             message = "";
 
             try {
+                
                 while (dataInputStream.available() > 0) {
                     message += (char) dataInputStream.read();
                 }
+                
                 if (!message.isEmpty()) {
-                    connectionManager.getMessageInputList().add(message);
+                    connectionManager.addMessageListRead(Message.IN, message);
                 }
+                
                 Thread.sleep(1000);
+                
             } catch (IOException ex) {
                 Logger.getLogger(MessageManagerReader.class.getName()).log(Level.SEVERE, null, ex);
             } catch (InterruptedException ex) {

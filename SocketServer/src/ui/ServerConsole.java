@@ -146,9 +146,8 @@ public class ServerConsole extends javax.swing.JFrame {
 
     private void jBtnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnStartActionPerformed
         // TODO add your handling code here:
-        server = new Server(this, Integer.parseInt(jTextFieldPort.getText()));
-        Thread tServer = new Thread(server);
-        tServer.start();
+        server = new Server(Integer.parseInt(jTextFieldPort.getText()));
+        server.start();
         
         jBtnStart.setEnabled(false);
         jBtnStop.setEnabled(true);

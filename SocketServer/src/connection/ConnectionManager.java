@@ -5,6 +5,7 @@
  */
 package connection;
 
+import entity.Message;
 import java.util.List;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -15,6 +16,7 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import message.MessageManagerReader;
+import message.MessageManagerSend;
 import message.MessageManagerWriter;
 import server.Server;
 
@@ -22,8 +24,8 @@ import server.Server;
  *
  * @author Julian
  */
-public class ConnectionManager implements Runnable {
-    
+public class ConnectionManager extends Thread {
+
     private Server server;
     private Socket connection;
     private InputStream is;
@@ -32,14 +34,15 @@ public class ConnectionManager implements Runnable {
     private DataOutputStream dataOutputStream;
     private MessageManagerReader mmr;
     private MessageManagerWriter mmw;
-    private List<String> messageInputList;
-    private List<String> messageOutputList;
+    private MessageManagerSend mms;
+    private List<Message> messageListRead;
+    private List<Message> messageListFinish;
 
     public ConnectionManager(Server server, Socket connection) {
-        
+
         this.server = server;
-        this.connection =  connection;
-        
+        this.connection = connection;
+
         try {
             is = connection.getInputStream();
             os = connection.getOutputStream();
@@ -115,35 +118,59 @@ public class ConnectionManager implements Runnable {
         this.mmw = mmw;
     }
 
-    public List<String> getMessageInputList() {
-        return messageInputList;
+    public MessageManagerSend getMms() {
+        return mms;
     }
 
-    public void setMessageInputList(List<String> messageInputList) {
-        this.messageInputList = messageInputList;
+    public void setMms(MessageManagerSend mms) {
+        this.mms = mms;
     }
 
-    public List<String> getMessageOutputList() {
-        return messageOutputList;
+    public List<Message> getMessageListRead() {
+        return messageListRead;
     }
 
-    public void setMessageOutputList(List<String> messageOutputList) {
-        this.messageOutputList = messageOutputList;
+    public void setMessageListRead(List<Message> messageListRead) {
+        this.messageListRead = messageListRead;
     }
-    
+
+    public List<Message> getMessageListFinish() {
+        return messageListFinish;
+    }
+
+    public void setMessageListFinish(List<Message> messageListFinish) {
+        this.messageListFinish = messageListFinish;
+    }
+
+    public boolean existMessageRead() {
+        return messageListRead.size() > 0;
+    }
+
+    public void addMessageListRead(int typeMessage, String message) {
+        Message messageObjet = new Message(typeMessage, message);
+        messageObjet.read();
+        messageListRead.add(messageObjet);
+    }
+
+    public Message readNextMessage() {
+        Message message =  messageListRead.get(1);
+        messageListFinish.add(message);
+        messageListRead.remove(1);
+        return message;
+    }
+
     @Override
     public void run() {
 
         mmr = new MessageManagerReader(this);
-        Thread tReader = new Thread(mmr);
-        tReader.start();
+        mmr.run();
 
         mmw = new MessageManagerWriter(this);
-        Thread tWriter = new Thread(mmw);
-        tWriter.start();
-        
-        mmr.setStopped(true);
-        mmw.setStopped(true);
+        mmw.run();
+
+        mms = new MessageManagerSend(this);
+        mms.run();
+
     }
 
 }

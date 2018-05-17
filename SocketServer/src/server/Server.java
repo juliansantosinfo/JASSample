@@ -9,100 +9,100 @@ import connection.ConnectionManager;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import ui.ServerConsole;
 
 /**
  *
- * @author Julian
+ * @author Julian Santos
  */
-public class Server implements Runnable {
+public class Server extends  Thread{
 
     private int port;
-    private ServerConsole console;
     private ServerSocket serverSocket;
     private Socket connection;
+    private boolean started;
+    private ArrayList<ConnectionManager> connections;
 
-    public Server(ServerConsole serverConsole, int port) {
+    /**
+     * Contructor
+     *
+     * @param port
+     */
+    public Server(int port) {
         this.port = port;
-        console = serverConsole;
+        this.connections = new ArrayList<>();
+        startServer();
     }
 
+    /**
+     * Method: getPort
+     *
+     * @return
+     */
     public int getPort() {
         return port;
     }
 
+    /**
+     * Method: setPort
+     */
     public void setPort(int port) {
         this.port = port;
     }
 
-    public ServerConsole getConsole() {
-        return console;
+    /**
+     * Method: isStarted
+     *
+     * @return
+     */
+    public boolean isStarted() {
+        return started;
     }
 
-    public void setConsole(ServerConsole console) {
-        this.console = console;
+    /**
+     * Method: setStarted
+     */
+    public void setStarted(boolean started) {
+        this.started = started;
     }
 
+    /**
+     * Method: startServer
+     */
     public final void startServer() {
+
         try {
+
             serverSocket = new ServerSocket(port);
-            while (serverSocket.isBound()) {
-                connection = serverSocket.accept();
-                ConnectionManager connectionManager = new ConnectionManager(this, connection);
-                Thread t = new Thread(connectionManager);
-                t.start();
+
+            while (!serverSocket.isClosed()) {
                 
+                // Aceita conexao do cliente.
+                connection = serverSocket.accept();
+                
+                // Cria thread para gerenciar conexao.
+                ConnectionManager connectionManager = new ConnectionManager(this, connection);
+                connectionManager.start();
+
             }
+
         } catch (IOException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
+    /**
+     * Method: stopServer
+     */
     public void stopServer() {
         try {
-            if (serverSocket.isBound()) {
+            if (!serverSocket.isClosed()) {
                 serverSocket.close();
             }
         } catch (IOException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-    
-    public void logStartServer() {
-        
-        Calendar c = Calendar.getInstance();
-        String date = String.valueOf(c.get(Calendar.DAY_OF_MONTH) + "/" + String.valueOf(c.get(Calendar.MONTH)) + "/" + String.valueOf(c.get(Calendar.YEAR)));
-        String hour = String.valueOf(c.get(Calendar.HOUR_OF_DAY) + ":" + String.valueOf(c.get(Calendar.MINUTE)) + ":" + String.valueOf(c.get(Calendar.SECOND)));
-        
-        console.writeInConsole("----------------------------------------------");
-        console.writeInConsole("INICIANDO SERVER - ServersSocket 1.0");
-        console.writeInConsole("----------------------------------------------");
-        console.writeInConsole("Date: " + date);
-        console.writeInConsole("Time: " + hour);
-        console.writeInConsole("----------------------------------------------");
-    }
-    
-    public void logStoptServer() {
-        
-        Calendar c = Calendar.getInstance();
-        String date = String.valueOf(c.get(Calendar.DAY_OF_MONTH) + "/" + String.valueOf(c.get(Calendar.MONTH)) + "/" + String.valueOf(c.get(Calendar.YEAR)));
-        String hour = String.valueOf(c.get(Calendar.HOUR_OF_DAY) + ":" + String.valueOf(c.get(Calendar.MINUTE)) + ":" + String.valueOf(c.get(Calendar.SECOND)));
-        
-        console.writeInConsole("----------------------------------------------");
-        console.writeInConsole("FINALIZANDO SERVER - ServersSocket 1.0");
-        console.writeInConsole("----------------------------------------------");
-        console.writeInConsole("Date: " + date);
-        console.writeInConsole("Time: " + hour);
-        console.writeInConsole("----------------------------------------------");
-    }
-    
-    @Override
-    public void run() {
-        logStartServer();
-        startServer();
-        logStoptServer();
     }
 }

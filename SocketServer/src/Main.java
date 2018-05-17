@@ -1,5 +1,5 @@
 
-import ui.ServerConsole;
+import server.Server;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -17,7 +17,7 @@ public class Main {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        ServerConsole console = new ServerConsole();
+        Server server = new Server(27000);
     }
 
 }
