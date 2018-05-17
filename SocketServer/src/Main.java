@@ -1,5 +1,5 @@
 
-import server.Server;
+import br.com.juliansantos.server.Server;
 
 /*
  * To change this license header, choose License Headers in Project Properties.

@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package message;
+package br.com.juliansantos.message;
 
-import connection.ConnectionManager;
-import entity.Message;
+import br.com.juliansantos.connection.ConnectionManager;
+import br.com.juliansantos.entity.Message;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -21,7 +21,7 @@ public class MessageManagerWriter implements Runnable {
     private boolean stopped = false;
     private ConnectionManager connectionManager;
     private DataOutputStream dataOutputStream;
-    private String message;
+    private Message message;
 
     public MessageManagerWriter() {
     }
@@ -55,27 +55,24 @@ public class MessageManagerWriter implements Runnable {
         this.dataOutputStream = dataOutputStream;
     }
 
-    public String getMessage() {
+    public Message getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
+    public void setMessage(Message message) {
         this.message = message;
     }
 
     @Override
     public void run() {
 
-        message = "";
-
         while (!stopped) {
-
-            if (!message.isEmpty()) {
+            
+            while (connectionManager.existMessageOutputList()) {
+                
                 try {
-                    dataOutputStream.writeUTF(message);
+                    dataOutputStream.writeUTF(message.getMessage());
                     dataOutputStream.flush();
-                    connectionManager.addMessageListRead(Message.OUT, message);
-                    message = "";
                 } catch (IOException ex) {
                     Logger.getLogger(MessageManagerWriter.class.getName()).log(Level.SEVERE, null, ex);
                 }

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ui;
+package br.com.juliansantos.ui;
 
 import java.awt.AWTException;
 import java.awt.EventQueue;
@@ -22,7 +22,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
-import server.Server;
+import br.com.juliansantos.server.Server;
 
 /**
  *

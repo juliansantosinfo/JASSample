@@ -3,11 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity;
+package br.com.juliansantos.entity;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import br.com.juliansantos.JASDateHour.JASDateHour;
 
 /**
  *
@@ -18,10 +16,6 @@ public class Message {
     public static final int IN = 1;
     public static final int OUT = 2;
     
-    private Calendar c = Calendar.getInstance();
-    private Date dateObject = new Date();
-    private SimpleDateFormat sdfDate = new SimpleDateFormat("dd/mm/yyyy");
-    private SimpleDateFormat sdfHour = new SimpleDateFormat("HH:mm:ss");
     private String date;
     private String hour;
     private int typrMessage;
@@ -77,11 +71,8 @@ public class Message {
     }
     
     public void read() {
-        date = sdfDate.format(dateObject);
-        hour = sdfHour.format(dateObject);
+        date = JASDateHour.currentDate();
+        hour = JASDateHour.currentHour();
         messageReady = true;
     }
-    
-    
-    
 }

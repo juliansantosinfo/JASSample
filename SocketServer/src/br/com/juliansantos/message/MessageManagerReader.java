@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package message;
+package br.com.juliansantos.message;
 
-import connection.ConnectionManager;
-import entity.Message;
+import br.com.juliansantos.connection.ConnectionManager;
+import br.com.juliansantos.entity.Message;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -53,7 +53,7 @@ public class MessageManagerReader implements Runnable {
                 }
                 
                 if (!message.isEmpty()) {
-                    connectionManager.addMessageListRead(Message.IN, message);
+                    connectionManager.addMessageInputList(message);
                 }
                 
                 Thread.sleep(1000);

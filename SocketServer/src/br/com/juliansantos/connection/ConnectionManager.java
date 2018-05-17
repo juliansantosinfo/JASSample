@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package connection;
+package br.com.juliansantos.connection;
 
-import entity.Message;
+import br.com.juliansantos.entity.Message;
 import java.util.List;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -15,10 +15,11 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import message.MessageManagerReader;
-import message.MessageManagerSend;
-import message.MessageManagerWriter;
-import server.Server;
+import br.com.juliansantos.message.MessageManagerReader;
+import br.com.juliansantos.message.MessageManagerSend;
+import br.com.juliansantos.message.MessageManagerWriter;
+import br.com.juliansantos.message.MessageProcessManager;
+import br.com.juliansantos.server.Server;
 
 /**
  *
@@ -34,9 +35,10 @@ public class ConnectionManager extends Thread {
     private DataOutputStream dataOutputStream;
     private MessageManagerReader mmr;
     private MessageManagerWriter mmw;
+    private MessageProcessManager mpm;
     private MessageManagerSend mms;
-    private List<Message> messageListRead;
-    private List<Message> messageListFinish;
+    private List<Message> messageInputList;
+    private List<Message> messageOutputList;
 
     public ConnectionManager(Server server, Socket connection) {
 
@@ -126,39 +128,58 @@ public class ConnectionManager extends Thread {
         this.mms = mms;
     }
 
-    public List<Message> getMessageListRead() {
-        return messageListRead;
+    public List<Message> getMessageInputList() {
+        return messageInputList;
     }
 
-    public void setMessageListRead(List<Message> messageListRead) {
-        this.messageListRead = messageListRead;
+    public void setMessageInputList(List<Message> messageInputList) {
+        this.messageInputList = messageInputList;
     }
 
-    public List<Message> getMessageListFinish() {
-        return messageListFinish;
+    public List<Message> getMessageOutputList() {
+        return messageOutputList;
     }
 
-    public void setMessageListFinish(List<Message> messageListFinish) {
-        this.messageListFinish = messageListFinish;
+    public void setMessageOutputList(List<Message> messageOutputList) {
+        this.messageOutputList = messageOutputList;
+    }
+    
+    public boolean existMessageInputList() {
+        return messageInputList.size() > 0;
     }
 
-    public boolean existMessageRead() {
-        return messageListRead.size() > 0;
-    }
-
-    public void addMessageListRead(int typeMessage, String message) {
-        Message messageObjet = new Message(typeMessage, message);
+    public void addMessageInputList(String message) {
+        Message messageObjet = new Message(Message.IN, message);
         messageObjet.read();
-        messageListRead.add(messageObjet);
+        messageInputList.add(messageObjet);
+    }
+    
+    public Message nextMessageInputList () {
+        return messageInputList.get(1);
+    }
+    
+    public Message getMessageInputList (int index) {
+        return messageInputList.get(index);
+    }
+    
+    public boolean existMessageOutputList() {
+        return messageInputList.size() > 0;
     }
 
-    public Message readNextMessage() {
-        Message message =  messageListRead.get(1);
-        messageListFinish.add(message);
-        messageListRead.remove(1);
-        return message;
+    public void addMessageOutputList(String message) {
+        Message messageObjet = new Message(Message.OUT, message);
+        messageObjet.read();
+        messageInputList.add(messageObjet);
     }
-
+    
+    public Message nextMessageOutputList () {
+        return messageOutputList.get(1);
+    }
+    
+    public Message getMessageOutputList (int index) {
+        return messageOutputList.get(index);
+    }
+    
     @Override
     public void run() {
 
@@ -167,7 +188,10 @@ public class ConnectionManager extends Thread {
 
         mmw = new MessageManagerWriter(this);
         mmw.run();
-
+        
+        mpm = new MessageProcessManager(this);
+        mpm.run();
+        
         mms = new MessageManagerSend(this);
         mms.run();
 

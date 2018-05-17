@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package message;
+package br.com.juliansantos.message;
 
-import connection.ConnectionManager;
-import entity.Message;
+import br.com.juliansantos.connection.ConnectionManager;
+import br.com.juliansantos.entity.Message;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,9 +38,9 @@ public class MessageManagerSend implements Runnable {
 
         while (true) {
 
-            if (connectionManager.existMessageRead()) {
+            if (connectionManager.existMessageOutputList()) {
                 
-                message = connectionManager.readNextMessage();
+                message = new Message(0, "");
                 
                 try {
                     if (message.getTyprMessage() == Message.IN) {
