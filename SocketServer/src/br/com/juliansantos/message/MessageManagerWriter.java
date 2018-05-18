@@ -70,33 +70,38 @@ public class MessageManagerWriter implements Runnable {
     @Override
     public void run() {
 
-        while (!stopped) {
+        while (!connectionManager.isStopThreads()) {
 
             while (connectionManager.existMessageOutputList()) {
 
                 message = connectionManager.nextMessageOutputList();
 
                 try {
-                    
+
                     gson = new GsonBuilder().create();
                     messageOutput = gson.toJson(message);
-                    
+
                     System.out.println("ESCR: " + messageOutput);
-                    
+
                     dataOutputStream.writeUTF(messageOutput);
                     dataOutputStream.flush();
-                    
+
                     connectionManager.removeMessageOutputList();
-                    
+
                 } catch (IOException ex) {
-                    Logger.getLogger(MessageManagerWriter.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println("CONEXAO COM SERVIDOR FINALIZADA!");
+                    connectionManager.setStopThreads(true);
                 }
             }
 
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(MessageManagerWriter.class.getName()).log(Level.SEVERE, null, ex);
+            synchronized (connectionManager.getKeyOutputList()) {
+                try {
+                    System.out.println("INICIO ESPERA MMW");
+                    connectionManager.getKeyOutputList().wait();
+                    System.out.println("FIM ESPERA MMW");
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(MessageProcessManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     }

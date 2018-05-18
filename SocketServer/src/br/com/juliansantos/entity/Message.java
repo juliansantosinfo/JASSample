@@ -5,16 +5,13 @@
  */
 package br.com.juliansantos.entity;
 
-import br.com.juliansantos.JASDateHour.JASDateHour;
+import br.com.juliansantos.JASDependencies.JASDateHour;
 
 /**
  *
  * @author Julian Santos
  */
 public class Message {
-
-    public static final int IN = 1;
-    public static final int OUT = 2;
 
     private String date;
     private String hour;
@@ -62,11 +59,11 @@ public class Message {
         this.messageReady = messageReady;
     }
 
-    public Message(int typrMessage, String message) {
+    public Message(String message) {
         this.date = "";
         this.hour = "";
         this.messageReady = false;
-        this.typrMessage = typrMessage;
+        this.typrMessage = 0;
         this.message = message;
     }
 

@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Julian
+ * @author Julian Santos
  */
 public class MessageManagerReader implements Runnable {
 
@@ -46,28 +46,32 @@ public class MessageManagerReader implements Runnable {
     @Override
     public void run() {
 
-        while (!stopped) {
+        messageInput = "";
 
-            messageInput = "";
+        while (!connectionManager.isStopThreads()) {
 
             try {
 
                 while (dataInputStream.available() > 0) {
-                    messageInput += (char) dataInputStream.read();
+                    messageInput = dataInputStream.readUTF();
                 }
 
                 if (!messageInput.isEmpty()) {
-                    messageInput = messageInput.substring(2);
                     System.out.println("LIDO: " + messageInput);
                     gson = new GsonBuilder().create();
                     message = gson.fromJson(messageInput, Message.class);
                     connectionManager.addMessageInputList(message);
+                    messageInput = "";
+                    synchronized (connectionManager.getKeyInputList()) {
+                        connectionManager.getKeyInputList().notifyAll();
+                    }
                 }
 
                 Thread.sleep(1000);
 
             } catch (IOException ex) {
-                Logger.getLogger(MessageManagerReader.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println("CONEXAO COM SERVIDOR FINALIZADA!");
+                connectionManager.setStopThreads(true);
             } catch (InterruptedException ex) {
                 Logger.getLogger(MessageManagerReader.class.getName()).log(Level.SEVERE, null, ex);
             }

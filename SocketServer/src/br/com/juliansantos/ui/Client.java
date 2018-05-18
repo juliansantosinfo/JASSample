@@ -5,6 +5,9 @@
  */
 package br.com.juliansantos.ui;
 
+import br.com.juliansantos.entity.Message;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -18,9 +21,11 @@ import java.util.logging.Logger;
  */
 public class Client extends javax.swing.JFrame implements Runnable {
 
-    Socket connection;
-    DataInputStream dis;
-    DataOutputStream dos;
+    private Socket connection;
+    private DataInputStream dis;
+    private DataOutputStream dos;
+    private Message message;
+    private String messageOutput;
 
     /**
      * Creates new form Cliente
@@ -204,15 +209,19 @@ public class Client extends javax.swing.JFrame implements Runnable {
     private void jBtnSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnSendActionPerformed
         try {
             // TODO add your handling code here:
-            dos.writeUTF(jTextField.getText());
+            messageOutput = "";
+            message = new Message(jTextField.getText());
+            message.read();
+
+            Gson gson = new GsonBuilder().create();
+            messageOutput = gson.toJson(message);
+
+            System.out.println("ENVIADO: " + messageOutput);
+
+            dos.writeUTF(messageOutput);
             dos.flush();
-            jTextArea.append("SEND:");
-            jTextArea.append("\n");
-            jTextArea.append(jTextField.getText());
-            jTextArea.append("\n");
-            jTextField.setText("");
+
         } catch (IOException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jBtnSendActionPerformed
 

@@ -16,7 +16,6 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import br.com.juliansantos.message.MessageManagerReader;
-import br.com.juliansantos.message.MessageManagerSend;
 import br.com.juliansantos.message.MessageManagerWriter;
 import br.com.juliansantos.message.MessageProcessManager;
 import br.com.juliansantos.server.Server;
@@ -37,11 +36,12 @@ public class ConnectionManager extends Thread {
     private MessageManagerReader mmr;
     private MessageManagerWriter mmw;
     private MessageProcessManager mpm;
-    private MessageManagerSend mms;
     private List<Message> messageInputList = new ArrayList<>();
     private List<Message> messageOutputList = new ArrayList<>();
+    private boolean stopThreads = false;
 
     private Object keyInputList = new Object();
+    private Object keyOutputList = new Object();
 
     public ConnectionManager(Server server, Socket connection) {
 
@@ -59,76 +59,28 @@ public class ConnectionManager extends Thread {
 
     }
 
-    public Server getServer() {
-        return server;
-    }
-
-    public void setServer(Server server) {
-        this.server = server;
-    }
-
     public Socket getConnection() {
         return connection;
-    }
-
-    public void setConnection(Socket connection) {
-        this.connection = connection;
-    }
-
-    public InputStream getIs() {
-        return is;
-    }
-
-    public void setIs(InputStream is) {
-        this.is = is;
-    }
-
-    public OutputStream getOs() {
-        return os;
-    }
-
-    public void setOs(OutputStream os) {
-        this.os = os;
     }
 
     public DataInputStream getDataInputStream() {
         return dataInputStream;
     }
 
-    public void setDataInputStream(DataInputStream dataInputStream) {
-        this.dataInputStream = dataInputStream;
-    }
-
     public DataOutputStream getDataOutputStream() {
         return dataOutputStream;
-    }
-
-    public void setDataOutputStream(DataOutputStream dataOutputStream) {
-        this.dataOutputStream = dataOutputStream;
     }
 
     public MessageManagerReader getMmr() {
         return mmr;
     }
 
-    public void setMmr(MessageManagerReader mmr) {
-        this.mmr = mmr;
-    }
-
     public MessageManagerWriter getMmw() {
         return mmw;
     }
 
-    public void setMmw(MessageManagerWriter mmw) {
-        this.mmw = mmw;
-    }
-
-    public MessageManagerSend getMms() {
-        return mms;
-    }
-
-    public void setMms(MessageManagerSend mms) {
-        this.mms = mms;
+    public MessageProcessManager getMpm() {
+        return mpm;
     }
 
     public List<Message> getMessageInputList() {
@@ -151,8 +103,16 @@ public class ConnectionManager extends Thread {
         return keyInputList;
     }
 
-    public void setKeyInputList(Object keyInputList) {
-        this.keyInputList = keyInputList;
+    public Object getKeyOutputList() {
+        return keyOutputList;
+    }
+
+    public boolean isStopThreads() {
+        return stopThreads;
+    }
+
+    public void setStopThreads(boolean stopThreads) {
+        this.stopThreads = stopThreads;
     }
 
     public boolean existMessageInputList() {
@@ -164,7 +124,7 @@ public class ConnectionManager extends Thread {
     }
 
     public void addMessageInputList(String message) {
-        Message messageObjet = new Message(Message.IN, message);
+        Message messageObjet = new Message(message);
         messageObjet.read();
         messageInputList.add(messageObjet);
     }
@@ -190,7 +150,7 @@ public class ConnectionManager extends Thread {
     }
 
     public void addMessageOutputList(String message) {
-        Message messageObjet = new Message(Message.OUT, message);
+        Message messageObjet = new Message(message);
         messageObjet.read();
         messageOutputList.add(messageObjet);
     }

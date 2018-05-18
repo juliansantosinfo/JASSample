@@ -31,7 +31,7 @@ public class MessageProcessManager implements Runnable {
     @Override
     public void run() {
 
-        while (!stopped) {
+        while (!connectionManager.isStopThreads()) {
 
             while (connectionManager.existMessageInputList()) {
 
@@ -39,19 +39,27 @@ public class MessageProcessManager implements Runnable {
 
                 gson = new GsonBuilder().create();
                 messageProcess = gson.toJson(message);
-                System.out.println("PROC: " + messageProcess);
 
                 connectionManager.addMessageOutputList(message);
                 connectionManager.removeMessageInputList();
 
+                System.out.println("PROC: " + messageProcess);
+
+                synchronized (connectionManager.getKeyOutputList()) {
+                    connectionManager.getKeyOutputList().notifyAll();
+                }
+
             }
 
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(MessageProcessManager.class.getName()).log(Level.SEVERE, null, ex);
+            synchronized (connectionManager.getKeyInputList()) {
+                try {
+                    System.out.println("INICIO ESPERA MPM");
+                    connectionManager.getKeyInputList().wait();
+                    System.out.println("FIM ESPERA MPM");
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(MessageProcessManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
-
         }
     }
 }

@@ -6,6 +6,7 @@
 package br.com.juliansantos.server;
 
 import br.com.juliansantos.connection.ConnectionManager;
+import br.com.juliansantos.ui.SystemTray;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -19,88 +20,107 @@ import java.util.logging.Logger;
  */
 public class Server extends Thread {
 
+    // Variaveis globais.
     private int port;
     private ServerSocket serverSocket;
     private Socket connection;
+    private ServerConnection serverConnection;
     private boolean started;
     private ArrayList<ConnectionManager> connections;
 
-    /**
-     * Contructor
-     *
-     * @param port
-     */
+    // Contrutores.
     public Server(int port) {
         this.port = port;
-        this.connections = new ArrayList<>();
-        startServer();
+        this.started = false;
+        SystemTray.initSystemTray(this);
     }
 
-    /**
-     * Method: getPort
-     *
-     * @return
-     */
+    // GETTERS e SETTERS.
     public int getPort() {
         return port;
     }
 
-    /**
-     * Method: setPort
-     */
     public void setPort(int port) {
         this.port = port;
     }
 
-    /**
-     * Method: isStarted
-     *
-     * @return
-     */
+    public ServerSocket getServerSocket() {
+        return serverSocket;
+    }
+
+    public void setServerSocket(ServerSocket serverSocket) {
+        this.serverSocket = serverSocket;
+    }
+
     public boolean isStarted() {
         return started;
     }
 
-    /**
-     * Method: setStarted
-     */
     public void setStarted(boolean started) {
         this.started = started;
     }
 
-    /**
-     * Method: startServer
-     */
+    public ArrayList<ConnectionManager> getConnections() {
+        return connections;
+    }
+
+    public void setConnections(ArrayList<ConnectionManager> connections) {
+        this.connections = connections;
+    }
+
+    // Inicia servidor.
     public final void startServer() {
+
+        System.out.println("---------------------------------------------");
+        System.out.println("INICIANDO...");
 
         try {
 
+            System.out.println("CRIANDO LISTENER PARA SERVIDOR");
             serverSocket = new ServerSocket(port);
+            connections = new ArrayList<>();
 
-            while (!serverSocket.isClosed()) {
-
-                // Aceita conexao do cliente.
-                connection = serverSocket.accept();
-
-                // Cria thread para gerenciar conexao.
-                ConnectionManager connectionManager = new ConnectionManager(this, connection);
-                connectionManager.start();
-
+            System.out.println("INICIANDO THREAD COM LISTENER PARA CONEXOES");
+            if (!isStarted()) {
+                serverConnection = new ServerConnection(this);
+                Thread tServerConnection = new Thread(serverConnection);
+                tServerConnection.start();
             }
 
+            setStarted(true);
+
+            System.out.println("INICIADO COM SUCESSO!");
+
         } catch (IOException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("LISTENER FINALIZADO!");
         }
     }
 
-    /**
-     * Method: stopServer
-     */
+    // Para servidor.
     public void stopServer() {
+
+        System.out.println("FINALIZANDO...");
+
         try {
+
+            while (connections.size() > 0) {
+                System.out.println("FECHANDO CONEXAO: " + connections.get(0).getConnection().toString());
+                System.out.println(connections.get(0).getConnection().getInetAddress().getHostName() + "FINALIZADO!");
+                connections.get(0).getConnection().close();
+                connections.get(0).setStopThreads(true);
+                connections.remove(0);
+            }
+
             if (!serverSocket.isClosed()) {
+                System.out.println("FECHANDO LISTENER");
                 serverSocket.close();
             }
+
+            setStarted(false);
+
+            System.out.println("FINALIZADO COM SUCESSO!");
+            System.out.println("---------------------------------------------");
+
         } catch (IOException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
