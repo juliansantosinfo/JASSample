@@ -7,7 +7,6 @@ package br.com.juliansantos.ui;
 
 import br.com.juliansantos.server.Server;
 import java.awt.AWTException;
-import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Image;
@@ -70,8 +69,8 @@ public class SystemTray {
             menuItemConsole.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    ServerConsole serverConsole = new ServerConsole();
-                    Thread tConsole = new Thread(server);
+                    Console console = new Console(server);
+                    Thread tConsole = new Thread(console);
                     tConsole.start();
                 }
             });
@@ -102,7 +101,7 @@ public class SystemTray {
             popupMenu.addSeparator();
             popupMenu.add(menuItemAbout);
 
-            Image icon = Toolkit.getDefaultToolkit().getImage("src/main/resources/Media/icon.png");
+            Image icon = Toolkit.getDefaultToolkit().getImage("src/main/resources/media/images/trayicons/icon.png");
 
             TrayIcon trayIcon = new TrayIcon(icon, "JASWSLauncher Server", popupMenu);
             trayIcon.addMouseListener(new MouseAdapter() {
@@ -112,7 +111,7 @@ public class SystemTray {
             tray.add(trayIcon);
 
         } catch (AWTException ex) {
-            Logger.getLogger(ServerConsole.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Console.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -124,7 +123,7 @@ public class SystemTray {
             JPopupMenu popupMenu = new JPopupMenu("Menu");
 
             JMenuItem menuItemStart = new JMenuItem("Start");
-            menuItemStart.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/main/resources/Media/start-icon.png")));
+            menuItemStart.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/main/resources/media/images/trayicons/start-icon.png")));
             menuItemStart.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -136,7 +135,7 @@ public class SystemTray {
             });
 
             JMenuItem menuItemStop = new JMenuItem("Stop");
-            menuItemStop.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/main/resources/Media/stop-icon.png")));
+            menuItemStop.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/main/resources/media/images/trayicons/stop-icon.png")));
             menuItemStop.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -148,7 +147,7 @@ public class SystemTray {
             });
 
             JMenuItem menuItemClient = new JMenuItem("Client");
-            menuItemClient.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/main/resources/Media/client-icon.png")));
+            menuItemClient.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/main/resources/media/images/trayicons/client-icon.png")));
             menuItemClient.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -157,18 +156,18 @@ public class SystemTray {
             });
 
             JMenuItem menuItemConsole = new JMenuItem("Console");
-            menuItemConsole.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/main/resources/Media/console-icon.png")));
+            menuItemConsole.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/main/resources/media/images/trayicons/console-icon.png")));
             menuItemConsole.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    ServerConsole serverConsole = new ServerConsole();
-                    Thread tConsole = new Thread(serverConsole);
+                    Console console = new Console(server);
+                    Thread tConsole = new Thread(console);
                     tConsole.start();
                 }
             });
 
             JMenuItem menuItemExit = new JMenuItem("Exit Application");
-            menuItemExit.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/main/resources/Media/exit-icon.png")));
+            menuItemExit.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/main/resources/media/images/trayicons/exit-icon.png")));
             menuItemExit.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -178,7 +177,7 @@ public class SystemTray {
             });
 
             JMenuItem menuItemAbout = new JMenuItem("About");
-            menuItemAbout.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/main/resources/Media/about-icon.png")));
+            menuItemAbout.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/main/resources/media/images/trayicons/about-icon.png")));
             menuItemAbout.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -202,7 +201,7 @@ public class SystemTray {
             menuItemExit.setFont(new Font("Impact", Font.ITALIC, 20));
             menuItemAbout.setFont(new Font("Impact", Font.ITALIC, 20));
             
-            Image icon = Toolkit.getDefaultToolkit().getImage("src/main/resources/Media/systemtray-icon.png");
+            Image icon = Toolkit.getDefaultToolkit().getImage("src/main/resources/media/images/trayicons/systemtray-icon.png");
 
             TrayIcon trayIcon = new TrayIcon(icon, "JASWSLauncher Server");
             trayIcon.setImageAutoSize(true);
@@ -221,7 +220,7 @@ public class SystemTray {
             tray.add(trayIcon);
 
         } catch (AWTException ex) {
-            Logger.getLogger(ServerConsole.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Console.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
