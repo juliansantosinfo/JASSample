@@ -6,7 +6,6 @@
 package br.com.juliansantos.message;
 
 import br.com.juliansantos.connection.ConnectionManager;
-import br.com.juliansantos.entity.Message;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.DataInputStream;

@@ -6,7 +6,6 @@
 package br.com.juliansantos.message;
 
 import br.com.juliansantos.connection.ConnectionManager;
-import br.com.juliansantos.entity.Message;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.DataOutputStream;
@@ -96,9 +95,7 @@ public class MessageManagerWriter implements Runnable {
 
             synchronized (connectionManager.getKeyOutputList()) {
                 try {
-                    System.out.println("INICIO ESPERA MMW");
                     connectionManager.getKeyOutputList().wait();
-                    System.out.println("FIM ESPERA MMW");
                 } catch (InterruptedException ex) {
                     Logger.getLogger(MessageProcessManager.class.getName()).log(Level.SEVERE, null, ex);
                 }

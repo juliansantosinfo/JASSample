@@ -5,7 +5,7 @@
  */
 package br.com.juliansantos.ui;
 
-import br.com.juliansantos.entity.Message;
+import br.com.juliansantos.message.Message;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.DataInputStream;

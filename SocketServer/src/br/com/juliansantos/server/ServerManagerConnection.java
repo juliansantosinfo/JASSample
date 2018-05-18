@@ -3,8 +3,6 @@ package br.com.juliansantos.server;
 import br.com.juliansantos.connection.ConnectionManager;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -15,12 +13,12 @@ import java.util.logging.Logger;
  *
  * @author Julia
  */
-public class ServerConnection implements Runnable {
+public class ServerManagerConnection implements Runnable {
 
     private Server server;
     private Socket connection;
 
-    public ServerConnection(Server server) {
+    public ServerManagerConnection(Server server) {
         this.server = server;
     }
 

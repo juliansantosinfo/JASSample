@@ -5,7 +5,7 @@
  */
 package br.com.juliansantos.connection;
 
-import br.com.juliansantos.entity.Message;
+import br.com.juliansantos.message.Message;
 import java.util.List;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

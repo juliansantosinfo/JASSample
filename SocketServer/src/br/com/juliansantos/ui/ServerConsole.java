@@ -5,30 +5,16 @@
  */
 package br.com.juliansantos.ui;
 
-import java.awt.AWTException;
 import java.awt.EventQueue;
-import java.awt.Image;
-import java.awt.MenuItem;
-import java.awt.PopupMenu;
-import java.awt.SystemTray;
-import java.awt.Toolkit;
-import java.awt.TrayIcon;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JButton;
-import javax.swing.JTextArea;
 import br.com.juliansantos.server.Server;
 
 /**
  *
  * @author Julia
  */
-public class ServerConsole extends javax.swing.JFrame {
+public class ServerConsole extends javax.swing.JFrame implements Runnable {
 
     Server server;
 
@@ -36,12 +22,14 @@ public class ServerConsole extends javax.swing.JFrame {
      * Creates new form ServerConsole
      */
     public ServerConsole() {
-
         initComponents();
         initOthersComponents();
-        initSystemTray();
-        setVisible(true);
+    }
 
+    public ServerConsole(Server server) {
+        this.server = server;
+        initComponents();
+        initOthersComponents();
     }
 
     /**
@@ -146,11 +134,18 @@ public class ServerConsole extends javax.swing.JFrame {
 
     private void jBtnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnStartActionPerformed
         // TODO add your handling code here:
-        server = new Server(Integer.parseInt(jTextFieldPort.getText()));
-        server.start();
+        if (server == null) {
+            server = new Server(Integer.parseInt(jTextFieldPort.getText()));
+        }
 
-        jBtnStart.setEnabled(false);
-        jBtnStop.setEnabled(true);
+        if (server.isStarted()) {
+            jBtnStart.setEnabled(true);
+            jBtnStop.setEnabled(false);
+        } else {
+            server.startServer();
+            jBtnStart.setEnabled(false);
+            jBtnStop.setEnabled(true);
+        }
     }//GEN-LAST:event_jBtnStartActionPerformed
 
     private void jBtnStopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnStopActionPerformed
@@ -179,88 +174,7 @@ public class ServerConsole extends javax.swing.JFrame {
             public void windowClosing(WindowEvent e) {
                 setVisible(false);
             }
-
-            @Override
-            public void windowDeiconified(WindowEvent e) {
-                setVisible(false);
-            }
-
         });
-
-    }
-
-    public void initSystemTray() {
-
-        try {
-
-            PopupMenu popupMenu = new PopupMenu("Menu");
-
-            MenuItem menuItemOpen = new MenuItem("Open");
-            menuItemOpen.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    setVisible(true);
-                }
-            });
-
-            MenuItem menuItemExit = new MenuItem("Exit");
-            menuItemExit.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    Runtime r = Runtime.getRuntime();
-                    r.exit(0);
-                }
-            });
-
-            MenuItem menuItemAbout = new MenuItem("About");
-            menuItemAbout.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                }
-            });
-
-            MenuItem menuItemStart = new MenuItem("Start");
-            menuItemStart.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                }
-            });
-
-            MenuItem menuItemStop = new MenuItem("Stop");
-            menuItemStop.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                }
-            });
-
-            MenuItem menuItemClient = new MenuItem("Client");
-            menuItemClient.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    EventQueue.invokeLater(new Client());
-                }
-            });
-
-            popupMenu.add(menuItemOpen);
-            popupMenu.add(menuItemExit);
-            popupMenu.addSeparator();
-            popupMenu.add(menuItemStart);
-            popupMenu.add(menuItemStop);
-            popupMenu.add(menuItemClient);
-            popupMenu.addSeparator();
-            popupMenu.add(menuItemAbout);
-            Image icon = Toolkit.getDefaultToolkit().getImage(System.getProperty("user.dir") + "\\resources\\Media\\icon.png");
-
-            TrayIcon trayIcon = new TrayIcon(icon, "JASWSLauncher Server", popupMenu);
-            trayIcon.addMouseListener(new MouseAdapter() {
-            });
-
-            SystemTray tray = SystemTray.getSystemTray();
-            tray.add(trayIcon);
-
-        } catch (AWTException ex) {
-            Logger.getLogger(ServerConsole.class.getName()).log(Level.SEVERE, null, ex);
-        }
 
     }
 
@@ -274,39 +188,6 @@ public class ServerConsole extends javax.swing.JFrame {
     private javax.swing.JTextArea jTextAreaConsole;
     private javax.swing.JTextField jTextFieldPort;
     // End of variables declaration//GEN-END:variables
-
-    //GETTERS AND SETTERS
-    public JTextArea getjTextAreaConsole() {
-        return jTextAreaConsole;
-    }
-
-    public void setjTextAreaConsole(JTextArea jTextAreaConsole) {
-        this.jTextAreaConsole = jTextAreaConsole;
-    }
-
-    public JButton getjButtonClear() {
-        return jBtnClear;
-    }
-
-    public void setjButtonClear(JButton jButtonClear) {
-        this.jBtnClear = jButtonClear;
-    }
-
-    public JButton getjButtonStart() {
-        return jBtnStart;
-    }
-
-    public void setjButtonStart(JButton jButtonStart) {
-        this.jBtnStart = jButtonStart;
-    }
-
-    public JButton getjButtonStop() {
-        return jBtnStop;
-    }
-
-    public void setjButtonStop(JButton jButtonStop) {
-        this.jBtnStop = jButtonStop;
-    }
 
     public void writeInConsole(String text) {
         jTextAreaConsole.append(text);
@@ -323,5 +204,10 @@ public class ServerConsole extends javax.swing.JFrame {
 
         jTextAreaConsole.append("\n");
 
+    }
+
+    @Override
+    public void run() {
+        setVisible(true);
     }
 }

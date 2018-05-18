@@ -6,7 +6,6 @@
 package br.com.juliansantos.message;
 
 import br.com.juliansantos.connection.ConnectionManager;
-import br.com.juliansantos.entity.Message;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.util.logging.Level;
@@ -53,9 +52,7 @@ public class MessageProcessManager implements Runnable {
 
             synchronized (connectionManager.getKeyInputList()) {
                 try {
-                    System.out.println("INICIO ESPERA MPM");
                     connectionManager.getKeyInputList().wait();
-                    System.out.println("FIM ESPERA MPM");
                 } catch (InterruptedException ex) {
                     Logger.getLogger(MessageProcessManager.class.getName()).log(Level.SEVERE, null, ex);
                 }

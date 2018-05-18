@@ -21,10 +21,10 @@ import java.util.logging.Logger;
 public class Server extends Thread {
 
     // Variaveis globais.
-    private int port;
-    private ServerSocket serverSocket;
     private Socket connection;
-    private ServerConnection serverConnection;
+    private ServerSocket serverSocket;
+    private ServerManagerConnection serverManagerConnection;
+    private int port;
     private boolean started;
     private ArrayList<ConnectionManager> connections;
 
@@ -32,58 +32,58 @@ public class Server extends Thread {
     public Server(int port) {
         this.port = port;
         this.started = false;
-        SystemTray.initSystemTray(this);
+        SystemTray.initSystemTraySwing(this);
     }
-
+    
     // GETTERS e SETTERS.
     public int getPort() {
         return port;
     }
-
+    
     public void setPort(int port) {
         this.port = port;
     }
-
+    
     public ServerSocket getServerSocket() {
         return serverSocket;
     }
-
+    
     public void setServerSocket(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
     }
-
+    
     public boolean isStarted() {
         return started;
     }
-
+    
     public void setStarted(boolean started) {
         this.started = started;
     }
-
+    
     public ArrayList<ConnectionManager> getConnections() {
         return connections;
     }
-
+    
     public void setConnections(ArrayList<ConnectionManager> connections) {
         this.connections = connections;
     }
-
+    
     // Inicia servidor.
     public final void startServer() {
-
+        
         System.out.println("---------------------------------------------");
         System.out.println("INICIANDO...");
-
+        
         try {
-
+            
             System.out.println("CRIANDO LISTENER PARA SERVIDOR");
             serverSocket = new ServerSocket(port);
             connections = new ArrayList<>();
 
             System.out.println("INICIANDO THREAD COM LISTENER PARA CONEXOES");
             if (!isStarted()) {
-                serverConnection = new ServerConnection(this);
-                Thread tServerConnection = new Thread(serverConnection);
+                serverManagerConnection = new ServerManagerConnection(this);
+                Thread tServerConnection = new Thread(serverManagerConnection);
                 tServerConnection.start();
             }
 
