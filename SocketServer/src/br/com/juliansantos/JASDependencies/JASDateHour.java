@@ -54,7 +54,7 @@ public class JASDateHour {
         return simpleDateFormat.format(date);
     }
 
-    public String getDateInFormat(String format) {
+    public static String getDateInFormat(String format) {
         simpleDateFormat = new SimpleDateFormat(format);
         return simpleDateFormat.format(date);
     }
@@ -64,7 +64,7 @@ public class JASDateHour {
         return simpleDateFormat.format(date);
     }
 
-    public String getHourInFormat(String format) {
+    public static String getHourInFormat(String format) {
         simpleDateFormat = new SimpleDateFormat(format);
         return simpleDateFormat.format(date);
     }

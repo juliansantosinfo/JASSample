@@ -50,7 +50,6 @@ public class MessageManagerReader implements Runnable {
         while (!connectionManager.isStopThreads()) {
 
             try {
-
                 while (dataInputStream.available() > 0) {
                     messageInput = dataInputStream.readUTF();
                 }
@@ -65,16 +64,9 @@ public class MessageManagerReader implements Runnable {
                         connectionManager.getKeyInputList().notifyAll();
                     }
                 }
-
-                Thread.sleep(1000);
-
             } catch (IOException ex) {
-                System.out.println("CONEXAO COM SERVIDOR FINALIZADA!");
-                connectionManager.setStopThreads(true);
-            } catch (InterruptedException ex) {
                 Logger.getLogger(MessageManagerReader.class.getName()).log(Level.SEVERE, null, ex);
             }
-
         }
     }
 }

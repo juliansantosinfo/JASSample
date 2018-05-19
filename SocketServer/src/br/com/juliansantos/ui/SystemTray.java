@@ -70,8 +70,6 @@ public class SystemTray {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     Console console = new Console(server);
-                    Thread tConsole = new Thread(console);
-                    tConsole.start();
                 }
             });
 
@@ -160,9 +158,7 @@ public class SystemTray {
             menuItemConsole.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    Console console = new Console(server);
-                    Thread tConsole = new Thread(console);
-                    tConsole.start();
+                    new Thread(new Console(server)).start();
                 }
             });
 
@@ -193,14 +189,14 @@ public class SystemTray {
             popupMenu.add(menuItemExit);
             popupMenu.addSeparator();
             popupMenu.add(menuItemAbout);
-            
+
             menuItemStart.setFont(new Font("Impact", Font.ITALIC, 20));
             menuItemStop.setFont(new Font("Impact", Font.ITALIC, 20));
             menuItemClient.setFont(new Font("Impact", Font.ITALIC, 20));
             menuItemConsole.setFont(new Font("Impact", Font.ITALIC, 20));
             menuItemExit.setFont(new Font("Impact", Font.ITALIC, 20));
             menuItemAbout.setFont(new Font("Impact", Font.ITALIC, 20));
-            
+
             Image icon = Toolkit.getDefaultToolkit().getImage("src/main/resources/media/images/trayicons/systemtray-icon.png");
 
             TrayIcon trayIcon = new TrayIcon(icon, "JASWSLauncher Server");

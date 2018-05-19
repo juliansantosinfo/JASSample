@@ -5,7 +5,9 @@
  */
 package br.com.juliansantos.server;
 
+import br.com.juliansantos.JASDependencies.JASDateHour;
 import br.com.juliansantos.connection.ConnectionManager;
+import br.com.juliansantos.ui.Console;
 import br.com.juliansantos.ui.SystemTray;
 import java.io.File;
 import java.io.FileWriter;
@@ -14,12 +16,14 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
- * @author Julian Santos
+ * @author Julian A. Santos
  */
 public class Server extends Thread {
 
@@ -29,33 +33,49 @@ public class Server extends Thread {
     private ServerManagerConnection serverManagerConnection;
     private int port;
     private boolean started;
-    private ArrayList<ConnectionManager> connections;
+    private List<ConnectionManager> connectionList;
+    private List<Console> consoleList;
     private File logFile;
-    private PrintWriter printWriter;
+    private String logPath = System.getProperty("user.dir") + "\\src\\main\\resources\\logs\\";
+    private PrintWriter pwLogFile;
+    private Object keyToReadLog = new Object();
 
     // Contrutores.
     public Server(int port) {
-        
+
+        // Abre arquivo de Log.
+        try {
+
+            // Define arquivo de Log e PrintWriter para gravar o mesmo.
+            logFile = new File(logPath + createLogFileName());
+            pwLogFile = new PrintWriter(new FileWriter(logFile), true);
+
+            // Registra Log.
+            addToLog("LOG FILE STARTED AT: " + logFile.getAbsolutePath());
+
+        } catch (IOException ex) {
+            javax.swing.JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+
+        // Inicia variaveis.
         this.port = port;
         this.started = false;
-        
-        try {
-            this.logFile = new File("src/main/resources/logs/SocketServer.log");
-            this.printWriter = new PrintWriter(new FileWriter(logFile));
-        } catch (IOException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+        this.connectionList = new ArrayList<>();
+
+        // Inicia TrayIcon.
         SystemTray.initSystemTraySwing(this);
+
+        // Start Server.
+        startServer();
     }
 
     // GETTERS e SETTERS.
-    public int getPort() {
-        return port;
+    public Socket getConnection() {
+        return connection;
     }
 
-    public void setPort(int port) {
-        this.port = port;
+    public void setConnection(Socket connection) {
+        this.connection = connection;
     }
 
     public ServerSocket getServerSocket() {
@@ -66,6 +86,22 @@ public class Server extends Thread {
         this.serverSocket = serverSocket;
     }
 
+    public ServerManagerConnection getServerManagerConnection() {
+        return serverManagerConnection;
+    }
+
+    public void setServerManagerConnection(ServerManagerConnection serverManagerConnection) {
+        this.serverManagerConnection = serverManagerConnection;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
     public boolean isStarted() {
         return started;
     }
@@ -74,12 +110,44 @@ public class Server extends Thread {
         this.started = started;
     }
 
-    public ArrayList<ConnectionManager> getConnections() {
-        return connections;
+    public List<ConnectionManager> getConnectionList() {
+        return connectionList;
     }
 
-    public void setConnections(ArrayList<ConnectionManager> connections) {
-        this.connections = connections;
+    public void setConnectionList(List<ConnectionManager> connectionList) {
+        this.connectionList = connectionList;
+    }
+
+    public List<Console> getConsoleList() {
+        return consoleList;
+    }
+
+    public void setConsoleList(List<Console> consoleList) {
+        this.consoleList = consoleList;
+    }
+
+    public File getLogFile() {
+        return logFile;
+    }
+
+    public void setLogFile(File logFile) {
+        this.logFile = logFile;
+    }
+
+    public PrintWriter getPwLogFile() {
+        return pwLogFile;
+    }
+
+    public void setPwLogFile(PrintWriter pwLogFile) {
+        this.pwLogFile = pwLogFile;
+    }
+
+    public Object getKeyToReadLog() {
+        return keyToReadLog;
+    }
+
+    public void setKeyToReadLog(Object keyToReadLog) {
+        this.keyToReadLog = keyToReadLog;
     }
 
     // Inicia servidor.
@@ -87,63 +155,86 @@ public class Server extends Thread {
 
         try {
 
-            printWriter.println("---------------------------------------------");
-            printWriter.println("INICIANDO...");
-            printWriter.println("CRIANDO LISTENER PARA SERVIDOR");
-
-            serverSocket = new ServerSocket(port);
-            connections = new ArrayList<>();
-
-            printWriter.println("INICIANDO THREAD COM LISTENER PARA CONEXOES");
-
             if (!isStarted()) {
+
+                serverSocket = new ServerSocket(port);
                 serverManagerConnection = new ServerManagerConnection(this);
-                Thread tServerConnection = new Thread(serverManagerConnection);
-                tServerConnection.start();
+                new Thread(serverManagerConnection).start();
+                addToLog("SOCKETSERVER STARTED IN DOOR: " + String.valueOf(port));
+
+                setStarted(true);
+                addToLog("SERVER STARTED WITH SUCCESS!");
             }
 
-            setStarted(true);
-
-            printWriter.println("INICIADO COM SUCESSO!");
-
         } catch (IOException ex) {
-            printWriter.println("LISTENER FINALIZADO!");
+            addToLog(ex.getMessage().toUpperCase());
         }
-
-        printWriter.flush();
 
     }
 
     // Para servidor.
     public void stopServer() {
 
-        printWriter.println("FINALIZANDO...");
+        if (isStarted()) {
 
-        try {
+            addToLog("FINISHING SERVER IN DOOR: " + String.valueOf(port));
 
-            while (connections.size() > 0) {
-                printWriter.println("FECHANDO CONEXAO: " + connections.get(0).getConnection().toString());
-                printWriter.println(connections.get(0).getConnection().getInetAddress().getHostName() + "FINALIZADO!");
-                connections.get(0).getConnection().close();
-                connections.get(0).setStopThreads(true);
-                connections.remove(0);
+            try {
+
+                while (connectionList.size() > 0) {
+
+                    // Fecha conexao.
+                    connectionList.get(0).getConnection().close();
+                    connectionList.get(0).setStopThreads(true);
+                    connectionList.remove(0);
+
+                    // Registra Log.
+                    addToLog("CLOSING CONNECTION: " + connectionList.get(0).getConnection().toString());
+                    addToLog(connectionList.get(0).getConnection().getInetAddress().getHostName() + "CLOSED.");
+                }
+
+                if (!serverSocket.isClosed()) {
+
+                    // Fecha SocketServer.
+                    serverSocket.close();
+
+                    // Registra Log.
+                    addToLog("SOCKETSERVER IN DOOR " + String.valueOf(port) + " CLOSED.");
+                }
+
+                setStarted(false);
+
+                addToLog("STOPPED WITH SUCCESS.");
+
+            } catch (IOException ex) {
+                addToLog(ex.getMessage().toUpperCase());
             }
+        }
+    }
 
-            if (!serverSocket.isClosed()) {
-                printWriter.println("FECHANDO LISTENER");
-                serverSocket.close();
-            }
+    public void addToLog(String log) {
 
-            setStarted(false);
+        log = "[" + JASDateHour.currentDate() + "-" + JASDateHour.currentHour() + "] " + log;
 
-            printWriter.println("FINALIZADO COM SUCESSO!");
-            printWriter.println("---------------------------------------------");
+        pwLogFile.println(log);
 
-        } catch (IOException ex) {
-            printWriter.println(ex.getMessage());
+        System.out.println(log);
+
+        synchronized (keyToReadLog) {
+            keyToReadLog.notifyAll();
         }
 
-        printWriter.flush();
-        printWriter.close();
+    }
+
+    private String createLogFileName() {
+
+        String name = "SocketServer"
+                + "_"
+                + JASDateHour.getDateInFormat("yyyymmdd")
+                + "_"
+                + JASDateHour.getHourInFormat("HHmmss")
+                + ".log";
+
+        return name;
     }
 }

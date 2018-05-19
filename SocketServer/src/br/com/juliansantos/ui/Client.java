@@ -8,6 +8,8 @@ package br.com.juliansantos.ui;
 import br.com.juliansantos.message.Message;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -32,6 +34,13 @@ public class Client extends javax.swing.JFrame implements Runnable {
      */
     public Client() {
         initComponents();
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
     }
 
     /**

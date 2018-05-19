@@ -96,10 +96,12 @@ public class MessageManagerWriter implements Runnable {
             synchronized (connectionManager.getKeyOutputList()) {
                 try {
                     connectionManager.getKeyOutputList().wait();
+                    System.out.println("SAIU ESCREVENDO WAIT");
                 } catch (InterruptedException ex) {
-                    Logger.getLogger(MessageProcessManager.class.getName()).log(Level.SEVERE, null, ex);
+                    //Logger.getLogger(MessageProcessManager.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+
         }
     }
 

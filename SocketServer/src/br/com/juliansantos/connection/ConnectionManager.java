@@ -20,6 +20,7 @@ import br.com.juliansantos.message.MessageManagerWriter;
 import br.com.juliansantos.message.MessageProcessManager;
 import br.com.juliansantos.server.Server;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  *
@@ -27,6 +28,7 @@ import java.util.ArrayList;
  */
 public class ConnectionManager extends Thread {
 
+    private long id;
     private Server server;
     private Socket connection;
     private InputStream is;
@@ -115,6 +117,42 @@ public class ConnectionManager extends Thread {
         this.stopThreads = stopThreads;
     }
 
+    public Server getServer() {
+        return server;
+    }
+
+    public void setServer(Server server) {
+        this.server = server;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 71 * hash + Objects.hashCode(this.server);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+
+        final ConnectionManager other = (ConnectionManager) obj;
+        if (!Objects.equals(this.server.getPort(), other.server.getPort())) {
+            return false;
+        }
+        if (!Objects.equals(this.connection, other.connection)) {
+            return false;
+        }
+        return true;
+    }
+
+    // Controle de Mensagens.
     public boolean existMessageInputList() {
         return messageInputList.size() > 0;
     }
@@ -170,18 +208,55 @@ public class ConnectionManager extends Thread {
     @Override
     public void run() {
 
+        ThreadGroup threadGroup = new ThreadGroup(String.valueOf(connection.getPort()));
+
         mmr = new MessageManagerReader(this);
-        Thread tmmr = new Thread(mmr);
+        Thread tmmr = new Thread(threadGroup, mmr);
         tmmr.start();
 
         mmw = new MessageManagerWriter(this);
-        Thread tmmw = new Thread(mmw);
+        Thread tmmw = new Thread(threadGroup, mmw);
         tmmw.start();
 
         mpm = new MessageProcessManager(this);
-        Thread tmpm = new Thread(mpm);
+        Thread tmpm = new Thread(threadGroup, mpm);
         tmpm.start();
 
+        try {
+
+            while (true) {
+
+                synchronized (this) {
+                    // Aguarda 1 seg. para proxima tentativa de leitura do inputstrean.
+                    wait(2000);
+                }
+
+                // Testa envio via DataOutputStream para verificar conexão.
+                getDataOutputStream().writeBoolean(true);
+
+            }
+
+        } catch (IOException | InterruptedException ex) {
+
+            // Ativa variavel de controle de Threads.
+            setStopThreads(true);
+
+            // Acorda Threads em wait.
+            synchronized (getKeyInputList()) {
+                getKeyInputList().notifyAll();
+            }
+
+            // Acorda Threads em wait.
+            synchronized (getKeyOutputList()) {
+                getKeyOutputList().notifyAll();
+            }
+
+            // Remove conexao atual do servidor.
+            server.getConnectionList().remove(this);
+
+            // Registra Log.
+            getServer().addToLog("CONNECTION TO CLIENT INTERRUPTED WITH MESSAGE: " + ex.getMessage().toUpperCase());
+        }
     }
 
 }

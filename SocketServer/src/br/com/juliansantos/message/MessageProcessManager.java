@@ -53,10 +53,12 @@ public class MessageProcessManager implements Runnable {
             synchronized (connectionManager.getKeyInputList()) {
                 try {
                     connectionManager.getKeyInputList().wait();
+                    System.out.println("SAIU PROCESSAMENTO WAIT");
                 } catch (InterruptedException ex) {
-                    Logger.getLogger(MessageProcessManager.class.getName()).log(Level.SEVERE, null, ex);
+                    //Logger.getLogger(MessageProcessManager.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
+
     }
 }
