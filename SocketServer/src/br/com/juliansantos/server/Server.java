@@ -5,7 +5,7 @@
  */
 package br.com.juliansantos.server;
 
-import br.com.juliansantos.JASDependencies.JASDateHour;
+import br.com.juliansantos.JASDateHour;
 import br.com.juliansantos.connection.ConnectionManager;
 import br.com.juliansantos.ui.Console;
 import br.com.juliansantos.ui.SystemTray;
@@ -17,9 +17,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 
 /**
  *
