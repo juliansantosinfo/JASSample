@@ -167,8 +167,8 @@ public class Client extends javax.swing.JFrame implements Runnable {
     private void jBtnConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnConnectActionPerformed
         try {
             // TODO add your handling code here:
-            connection = new Socket(jTextFieldIP.getText(), Integer.parseInt(jTextFieldPort.getText()));
-
+            //connection = new Socket(jTextFieldIP.getText(), Integer.parseInt(jTextFieldPort.getText()));
+            connection = new Socket("127.0.0.1", 27000);
             if (connection.isConnected()) {
 
                 dis = new DataInputStream(connection.getInputStream());
