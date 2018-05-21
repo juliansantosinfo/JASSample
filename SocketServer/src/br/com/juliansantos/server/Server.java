@@ -27,22 +27,35 @@ public class Server extends Thread {
     // Variaveis globais.
     private Socket connection;
     private ServerSocket serverSocket;
+    private ServerConfig serverConfig;
     private ServerManagerConnection serverManagerConnection;
-    private int port;
+
     private boolean started;
+
     private List<ConnectionManager> connectionList;
     private List<Console> consoleList;
 
-    private ServerConfig serverConfig;
-
+    private int port;
+    private int connectionLimit;
     private File logFile;
-    private String logPath = getClass().getClassLoader().getResource("").getFile() + "src/main/resources/logs/";
+    private String logPath;
     private PrintWriter pwLogFile;
 
     private Object keyToReadLog = new Object();
 
     // Contrutores.
-    public Server(int port) {
+    public Server() {
+
+        // Carrega arquivo de configuração.
+        serverConfig = new ServerConfig();
+
+        if (serverConfig.loadIniFile()) {
+            port = serverConfig.getPort();
+            connectionLimit = serverConfig.getConnectionLimit();
+            logPath = serverConfig.getLogPath();
+        } else {
+            return;
+        }
 
         // Abre arquivo de Log.
         try {
@@ -59,7 +72,6 @@ public class Server extends Thread {
         }
 
         // Inicia variaveis.
-        this.port = port;
         this.started = false;
         this.connectionList = new ArrayList<>();
 

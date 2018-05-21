@@ -17,7 +17,7 @@ public class Main {
      */
     public static void main(String[] args) throws InterruptedException {
         // TODO code application logic here
-        new Server(27000);
+        new Server();
     }
 
 }

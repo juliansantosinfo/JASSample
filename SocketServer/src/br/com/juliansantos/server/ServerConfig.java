@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
+import javax.swing.JOptionPane;
 import org.ini4j.Ini;
 import org.ini4j.IniPreferences;
 
@@ -61,8 +62,9 @@ public class ServerConfig {
 
     // USER METHODS
     // -----------------------------------------------------------------------
-    public void loadIniFile() {
+    public boolean loadIniFile() {
 
+        boolean loadSuccessfully = false;
         File fileIni = new File(pathServerIni);
 
         if (!fileIni.exists()) {
@@ -75,10 +77,16 @@ public class ServerConfig {
             connectionLimit = ini.node("server").getInt("connection_limit", 0);
             logPath = ini.node("server").get("log_path", logPathDefault);
             logPath = logPath.isEmpty() ? logPathDefault : logPath;
+            loadSuccessfully = true;
         } catch (IOException ex) {
-            Logger.getLogger(ServerConfig.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showConfirmDialog(
+                    null,
+                    "Failed to load ServerSocket.ini configuration file!\n" + ex.getMessage(),
+                    "loadIniFile:Failed",
+                    JOptionPane.ERROR_MESSAGE);
+            loadSuccessfully = false;
         }
-
+        return loadSuccessfully;
     }
 
 }
