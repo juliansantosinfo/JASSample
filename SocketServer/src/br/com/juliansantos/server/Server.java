@@ -32,9 +32,13 @@ public class Server extends Thread {
     private boolean started;
     private List<ConnectionManager> connectionList;
     private List<Console> consoleList;
+
+    private ServerConfig serverConfig;
+
     private File logFile;
-    private String logPath = System.getProperty("user.dir") + "\\src\\main\\resources\\logs\\";
+    private String logPath = getClass().getClassLoader().getResource("").getFile() + "src/main/resources/logs/";
     private PrintWriter pwLogFile;
+
     private Object keyToReadLog = new Object();
 
     // Contrutores.

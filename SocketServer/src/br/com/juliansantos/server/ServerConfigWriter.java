@@ -9,7 +9,7 @@ package br.com.juliansantos.server;
  *
  * @author Julia
  */
-public class ServerWriterConfig implements Runnable {
+public class ServerConfigWriter implements Runnable {
 
     private ServerConfig serverConfig;
 
