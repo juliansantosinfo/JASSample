@@ -12,13 +12,24 @@ import br.com.juliansantos.JASDateHour;
  * @author Julian Santos
  */
 public class Message {
-
+    
+    public static final int TYPE_DEBUG = '0';
+    public static final int TYPE_LOGIN = '1';
+    
     private String date;
     private String hour;
     private int typrMessage;
     private String message;
     private boolean messageReady;
-
+    
+    public Message(int typeMessage, String message) {
+        this.date = "";
+        this.hour = "";
+        this.messageReady = false;
+        this.typrMessage = typeMessage;
+        this.message = message;
+    }
+    
     public String getDate() {
         return date;
     }
@@ -57,14 +68,6 @@ public class Message {
 
     public void setMessageReady(boolean messageReady) {
         this.messageReady = messageReady;
-    }
-
-    public Message(String message) {
-        this.date = "";
-        this.hour = "";
-        this.messageReady = false;
-        this.typrMessage = 0;
-        this.message = message;
     }
 
     public void read() {

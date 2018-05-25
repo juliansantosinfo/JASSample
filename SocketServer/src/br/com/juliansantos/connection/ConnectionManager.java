@@ -161,12 +161,6 @@ public class ConnectionManager extends Thread {
         messageInputList.add(message);
     }
 
-    public void addMessageInputList(String message) {
-        Message messageObjet = new Message(message);
-        messageObjet.read();
-        messageInputList.add(messageObjet);
-    }
-
     public Message nextMessageInputList() {
         return messageInputList.get(0);
     }
@@ -185,12 +179,6 @@ public class ConnectionManager extends Thread {
 
     public void addMessageOutputList(Message message) {
         messageOutputList.add(message);
-    }
-
-    public void addMessageOutputList(String message) {
-        Message messageObjet = new Message(message);
-        messageObjet.read();
-        messageOutputList.add(messageObjet);
     }
 
     public Message nextMessageOutputList() {

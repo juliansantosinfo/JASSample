@@ -32,6 +32,7 @@ public class MessageManagerReader implements Runnable {
     public MessageManagerReader(ConnectionManager connectionManager) {
         this.connectionManager = connectionManager;
         this.dataInputStream = connectionManager.getDataInputStream();
+        this.gson = new GsonBuilder().create();
     }
 
     public boolean isStopped() {
@@ -55,8 +56,7 @@ public class MessageManagerReader implements Runnable {
                 }
 
                 if (!messageInput.isEmpty()) {
-                    System.out.println("LIDO: " + messageInput);
-                    gson = new GsonBuilder().create();
+                    
                     message = gson.fromJson(messageInput, Message.class);
                     connectionManager.addMessageInputList(message);
                     messageInput = "";

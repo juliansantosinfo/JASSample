@@ -16,12 +16,22 @@ import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseMotionListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 
 /**
@@ -172,9 +182,9 @@ public class SystemTray {
                 }
             });
 
-            JMenuItem menuItemAbout = new JMenuItem("About");
-            menuItemAbout.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/main/resources/media/images/trayicons/about-icon.png")));
-            menuItemAbout.addActionListener(new ActionListener() {
+            JMenuItem menuItemExitMenu = new JMenuItem("Exit Menu");
+            menuItemExitMenu.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/main/resources/media/images/trayicons/about-icon.png")));
+            menuItemExitMenu.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                 }
@@ -188,14 +198,14 @@ public class SystemTray {
             popupMenu.addSeparator();
             popupMenu.add(menuItemExit);
             popupMenu.addSeparator();
-            popupMenu.add(menuItemAbout);
+            popupMenu.add(menuItemExitMenu);
 
             menuItemStart.setFont(new Font("Impact", Font.ITALIC, 20));
             menuItemStop.setFont(new Font("Impact", Font.ITALIC, 20));
             menuItemClient.setFont(new Font("Impact", Font.ITALIC, 20));
             menuItemConsole.setFont(new Font("Impact", Font.ITALIC, 20));
             menuItemExit.setFont(new Font("Impact", Font.ITALIC, 20));
-            menuItemAbout.setFont(new Font("Impact", Font.ITALIC, 20));
+            menuItemExitMenu.setFont(new Font("Impact", Font.ITALIC, 20));
 
             Image icon = Toolkit.getDefaultToolkit().getImage("src/main/resources/media/images/trayicons/systemtray-icon.png");
 

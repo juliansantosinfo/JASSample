@@ -8,8 +8,6 @@ package br.com.juliansantos.message;
 import br.com.juliansantos.connection.ConnectionManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -25,6 +23,7 @@ public class MessageProcessManager implements Runnable {
 
     public MessageProcessManager(ConnectionManager connectionManager) {
         this.connectionManager = connectionManager;
+        this.gson = new GsonBuilder().create();
     }
 
     @Override
@@ -36,13 +35,10 @@ public class MessageProcessManager implements Runnable {
 
                 message = connectionManager.nextMessageInputList();
 
-                gson = new GsonBuilder().create();
                 messageProcess = gson.toJson(message);
 
                 connectionManager.addMessageOutputList(message);
                 connectionManager.removeMessageInputList();
-
-                System.out.println("PROC: " + messageProcess);
 
                 synchronized (connectionManager.getKeyOutputList()) {
                     connectionManager.getKeyOutputList().notifyAll();
@@ -53,9 +49,8 @@ public class MessageProcessManager implements Runnable {
             synchronized (connectionManager.getKeyInputList()) {
                 try {
                     connectionManager.getKeyInputList().wait();
-                    System.out.println("SAIU PROCESSAMENTO WAIT");
                 } catch (InterruptedException ex) {
-                    //Logger.getLogger(MessageProcessManager.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println("THREAD MMW INTERROMPIDA: " + ex.getMessage());
                 }
             }
         }

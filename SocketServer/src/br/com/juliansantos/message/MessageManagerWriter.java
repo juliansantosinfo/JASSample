@@ -10,8 +10,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -32,6 +30,7 @@ public class MessageManagerWriter implements Runnable {
     public MessageManagerWriter(ConnectionManager connectionManager) {
         this.connectionManager = connectionManager;
         this.dataOutputStream = connectionManager.getDataOutputStream();
+        this.gson = new GsonBuilder().create();
     }
 
     public boolean isStopped() {
@@ -77,10 +76,7 @@ public class MessageManagerWriter implements Runnable {
 
                 try {
 
-                    gson = new GsonBuilder().create();
                     messageOutput = gson.toJson(message);
-
-                    System.out.println("ESCR: " + messageOutput);
 
                     dataOutputStream.writeUTF(messageOutput);
                     dataOutputStream.flush();
@@ -88,7 +84,7 @@ public class MessageManagerWriter implements Runnable {
                     connectionManager.removeMessageOutputList();
 
                 } catch (IOException ex) {
-                    System.out.println("CONEXAO COM SERVIDOR FINALIZADA!");
+                    System.out.println("CONEXAO COM SERVIDOR INTERROMPIDA: " + ex.getMessage());
                     connectionManager.setStopThreads(true);
                 }
             }
@@ -96,9 +92,8 @@ public class MessageManagerWriter implements Runnable {
             synchronized (connectionManager.getKeyOutputList()) {
                 try {
                     connectionManager.getKeyOutputList().wait();
-                    System.out.println("SAIU ESCREVENDO WAIT");
                 } catch (InterruptedException ex) {
-                    //Logger.getLogger(MessageProcessManager.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println("THREAD MMW INTERROMPIDA: " + ex.getMessage());
                 }
             }
 

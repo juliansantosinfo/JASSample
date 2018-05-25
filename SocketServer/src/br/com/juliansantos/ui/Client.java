@@ -219,13 +219,11 @@ public class Client extends javax.swing.JFrame implements Runnable {
         try {
             // TODO add your handling code here:
             messageOutput = "";
-            message = new Message(jTextField.getText());
+            message = new Message(1, jTextField.getText());
             message.read();
 
             Gson gson = new GsonBuilder().create();
             messageOutput = gson.toJson(message);
-
-            System.out.println("ENVIADO: " + messageOutput);
 
             dos.writeUTF(messageOutput);
             dos.flush();
