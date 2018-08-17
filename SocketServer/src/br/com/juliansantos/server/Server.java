@@ -5,7 +5,7 @@
  */
 package br.com.juliansantos.server;
 
-import br.com.juliansantos.JASDateHour;
+import br.com.juliansantos.JASDateHour.JASDateHour;
 import br.com.juliansantos.connection.ConnectionManager;
 import br.com.juliansantos.ui.Console;
 import br.com.juliansantos.ui.SystemTray;
