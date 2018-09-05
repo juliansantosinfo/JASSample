@@ -25,11 +25,11 @@
             <artifactId>ini4j</artifactId>
             <version>0.5.4</version>
         </dependency>
-        <!-- JULIAN SANTOS -->
+        <!-- https://mvnrepository.com/artifact/com.github.juliansantosinfo/JASDateHour -->
         <dependency>
-            <groupId>br.com.juliansantos</groupId>
+            <groupId>com.github.juliansantosinfo</groupId>
             <artifactId>JASDateHour</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>0.01</version>
         </dependency>
     </dependencies>
     

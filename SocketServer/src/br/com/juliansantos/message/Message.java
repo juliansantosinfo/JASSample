@@ -5,7 +5,7 @@
  */
 package br.com.juliansantos.message;
 
-import br.com.juliansantos.JASDateHour.JASDateHour;
+import com.github.juliansantosinfo.jasdatehour.JASDateHour;
 
 /**
  *

@@ -5,10 +5,10 @@
  */
 package br.com.juliansantos.server;
 
-import br.com.juliansantos.JASDateHour.JASDateHour;
 import br.com.juliansantos.connection.ConnectionManager;
 import br.com.juliansantos.ui.Console;
 import br.com.juliansantos.ui.SystemTray;
+import com.github.juliansantosinfo.jasdatehour.JASDateHour;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
