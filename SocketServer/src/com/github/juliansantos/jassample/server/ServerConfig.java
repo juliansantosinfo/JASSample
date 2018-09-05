@@ -18,8 +18,6 @@ package com.github.juliansantos.jassample.server;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import javax.swing.JOptionPane;
 import org.ini4j.Ini;
