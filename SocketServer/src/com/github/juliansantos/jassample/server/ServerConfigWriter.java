@@ -14,35 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.juliansantos.message;
+package com.github.juliansantos.jassample.server;
 
 /**
  *
  * @author Julian A. Santos
  */
-public class MessageLogin extends Message {
+public class ServerConfigWriter implements Runnable {
 
-    private String user;
-    private String password;
+    private ServerConfig serverConfig;
 
-    public MessageLogin(String message) {
-        super(Message.TYPE_LOGIN, message);
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    @Override
+    public void run() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

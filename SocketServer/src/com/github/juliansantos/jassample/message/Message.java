@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.juliansantos.message;
+package com.github.juliansantos.jassample.message;
 
 import com.github.juliansantosinfo.jasdatehour.JASDateHour;
 
@@ -25,7 +25,6 @@ import com.github.juliansantosinfo.jasdatehour.JASDateHour;
 public class Message {
     
     public static final int TYPE_DEBUG = '0';
-    public static final int TYPE_LOGIN = '1';
     
     private String date;
     private String hour;

@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.juliansantos.message;
+package com.github.juliansantos.jassample.message;
 
-import br.com.juliansantos.connection.ConnectionManager;
+import com.github.juliansantos.jassample.connection.ConnectionManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.DataInputStream;

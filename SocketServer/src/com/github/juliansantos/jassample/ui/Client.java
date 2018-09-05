@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.juliansantos.ui;
+package com.github.juliansantos.jassample.ui;
 
-import br.com.juliansantos.message.Message;
+import com.github.juliansantos.jassample.message.Message;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.awt.event.WindowAdapter;

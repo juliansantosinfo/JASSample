@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.juliansantos.ui;
+package com.github.juliansantos.jassample.ui;
 
-import br.com.juliansantos.server.Server;
+import com.github.juliansantos.jassample.server.Server;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -55,7 +55,6 @@ public class Console extends JFrame implements Runnable {
         jTAConsole = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(1280, 720));
 
         jTAConsole.setEditable(false);
         jTAConsole.setColumns(20);

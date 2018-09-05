@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.juliansantos.connection;
+package com.github.juliansantos.jassample.connection;
 
-import br.com.juliansantos.message.Message;
+import com.github.juliansantos.jassample.message.Message;
 import java.util.List;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -26,10 +26,10 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import br.com.juliansantos.message.MessageManagerReader;
-import br.com.juliansantos.message.MessageManagerWriter;
-import br.com.juliansantos.message.MessageProcessManager;
-import br.com.juliansantos.server.Server;
+import com.github.juliansantos.jassample.message.MessageManagerReader;
+import com.github.juliansantos.jassample.message.MessageManagerWriter;
+import com.github.juliansantos.jassample.message.MessageProcessManager;
+import com.github.juliansantos.jassample.server.Server;
 import java.util.ArrayList;
 import java.util.Objects;
 

@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.juliansantos.server;
+package com.github.juliansantos.jassample.server;
 
-import br.com.juliansantos.connection.ConnectionManager;
+import com.github.juliansantos.jassample.connection.ConnectionManager;
 import java.io.IOException;
 import java.net.Socket;
 import javax.swing.JOptionPane;
